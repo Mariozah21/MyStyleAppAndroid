@@ -5,4 +5,9 @@ interface INavigationRouter {
     fun navToMainScreen()
     fun navToMyProfileScreen()
     fun navToChatsScreen()
+
+    fun navToSignInScreen()
+    fun navToVerifyEmailScreen()
+    fun navToSignUpScreen()
+    fun navToForgotPasswordScreen()
 }
