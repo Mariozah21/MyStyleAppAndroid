@@ -13,13 +13,22 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 
 @Composable
 fun AddItemScreen(
-    navigation: INavigationRouter
+    navigation: INavigationRouter,
+    navController: NavController
 ){
+    BottomNavigation(navController = navController) {
+        AddItemScreenContent()
+    }
+}
+@Composable
+fun AddItemScreenContent(){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -27,7 +36,7 @@ fun AddItemScreen(
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Add Post Screen",
+            text = "Add Item Screen",
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),

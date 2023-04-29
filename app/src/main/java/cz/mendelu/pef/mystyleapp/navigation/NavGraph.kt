@@ -25,26 +25,26 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = startDestination){
         //Navigation destinations
         composable(route = Destination.MainScreen.route){
-            MainScreen(navigation)
+            MainScreen(navigation,navController)
         }
         composable(route = Destination.MyProfileScreen.route){
             MyProfileScreen(navigation,navController)
         }
         //Bottom Navigation Bar
         composable(route = BottomNavItem.MainScreen.route){
-            MainScreen(navigation)
+            MainScreen(navigation,navController)
         }
         composable(route =BottomNavItem.MyProfileScreen.route){
             MyProfileScreen(navigation,navController)
         }
         composable(route = BottomNavItem.AddItemScreen.route){
-            AddItemScreen(navigation)
+            AddItemScreen(navigation,navController)
         }
         composable(route = BottomNavItem.ChatsScreen.route){
-            ChatScreen(navigation)
+            ChatScreen(navigation,navController)
         }
         composable(route = BottomNavItem.SearchScreen.route){
-            SearchScreen(navigation)
+            SearchScreen(navigation,navController)
         }
     }
 

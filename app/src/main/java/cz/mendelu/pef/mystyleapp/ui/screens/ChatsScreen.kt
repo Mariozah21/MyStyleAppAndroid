@@ -13,13 +13,23 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 
 @Composable
 fun ChatScreen(
-    navigation: INavigationRouter
+    navigation: INavigationRouter,
+    navController: NavController
 ){
+    BottomNavigation(navController = navController) {
+        ChatScreenContent()
+    }
+}
+@Composable
+fun ChatScreenContent(){
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -27,7 +37,7 @@ fun ChatScreen(
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Add Post Screen",
+            text = "Chat Screen",
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),
