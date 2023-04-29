@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "435015957237",
+    "project_id": "mystyleapp-9e036",
+    "storage_bucket": "mystyleapp-9e036.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435015957237:android:49b279033bee047060e3bc",
+        "android_client_info": {
+          "package_name": "cz.mendelu.pef.mystyleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435015957237-9n5e04mojvur3bou71f0j2frcir1f4qb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.mendelu.pef.mystyleapp",
+            "certificate_hash": "21fc37935e48adaa87e1e7c0c5395365944cc91c"
+          }
+        },
+        {
+          "client_id": "435015957237-aekouh0hc1f5i5qorno9ckj9o8ms88m4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTt3gdO4hiTO6CGdDcFlB6jOWTm1dPgLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435015957237-aekouh0hc1f5i5qorno9ckj9o8ms88m4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
