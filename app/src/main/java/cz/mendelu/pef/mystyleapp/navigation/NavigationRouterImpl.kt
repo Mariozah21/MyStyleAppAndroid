@@ -19,4 +19,12 @@ class NavigationRouterImpl(
     override fun navToChatsScreen() {
         navController.navigate(BottomNavItem.ChatsScreen.route)
     }
+
+    override fun navToSearchScreen() {
+        navController.navigate(BottomNavItem.SearchScreen.route)
+    }
+
+    override fun navToAddItemScreen() {
+        navController.navigate(BottomNavItem.AddItemScreen.route)
+    }
 }
