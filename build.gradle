@@ -3,6 +3,9 @@ buildscript {
         compose_version = '1.1.1'
         nav_version = "2.5.3"
     }
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.15'
+    }
 
 
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.

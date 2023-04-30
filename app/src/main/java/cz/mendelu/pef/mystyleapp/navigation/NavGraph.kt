@@ -13,6 +13,7 @@ import cz.mendelu.pef.mystyleapp.ui.screens.ChatScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.MainScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.MyProfileScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.SearchScreen
+import cz.mendelu.pef.mystyleapp.ui.screens.WelcomeScreen
 
 @Composable
 fun NavGraph(
@@ -23,6 +24,10 @@ fun NavGraph(
     startDestination: String
 ){
     NavHost(navController = navController, startDestination = startDestination){
+        //Welcome Screen
+        composable(route = Destination.WelcomeScreen.route){
+            WelcomeScreen(navigation = navigation, navController = navController)
+        }
         //Navigation destinations
         composable(route = Destination.MainScreen.route){
             MainScreen(navigation,navController)
@@ -30,6 +35,8 @@ fun NavGraph(
         composable(route = Destination.MyProfileScreen.route){
             MyProfileScreen(navigation,navController)
         }
+
+
         //Bottom Navigation Bar
         composable(route = BottomNavItem.MainScreen.route){
             MainScreen(navigation,navController)

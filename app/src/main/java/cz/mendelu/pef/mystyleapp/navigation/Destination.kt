@@ -3,6 +3,7 @@ package cz.mendelu.pef.mystyleapp.navigation
 sealed class Destination(val route: String) {
     object MainScreen : Destination(route = "main_screen")
     object MyProfileScreen : Destination(route = "my_profile")
+    object WelcomeScreen :Destination(route = "welcome_screen")
 
     object SignInScreen: Destination(route = "sign_in_screen")
     object ForgotPasswordScreen: Destination(route = "forgot_password_screen")
