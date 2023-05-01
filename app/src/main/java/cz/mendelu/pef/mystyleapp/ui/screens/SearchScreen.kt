@@ -23,7 +23,7 @@ fun SearchScreen(
     navigation: INavigationRouter,
     navController: NavController
 ){
-    BottomNavigation(navController = navController) {
+    BottomNavigation(navController = navController, topBarTitle = "Search Screen") {
         SearchScreenContent()
     }
 }

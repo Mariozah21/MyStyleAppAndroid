@@ -23,7 +23,7 @@ fun AddItemScreen(
     navigation: INavigationRouter,
     navController: NavController
 ){
-    BottomNavigation(navController = navController) {
+    BottomNavigation(navController = navController, topBarTitle = "Add Item Screen") {
         AddItemScreenContent()
     }
 }

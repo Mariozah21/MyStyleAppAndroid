@@ -12,8 +12,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,11 +25,17 @@ import cz.mendelu.pef.mystyleapp.navigation.BottomNavItem
 import kotlinx.coroutines.launch
 
 
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigation(
     navController: NavController,
-    content: @Composable (paddingValues: PaddingValues) -> Unit){
+    topBarTitle: String,
+    content: @Composable (paddingValues: PaddingValues) -> Unit,
+
+){
     val items = listOf(
         BottomNavItem.MainScreen,
         BottomNavItem.SearchScreen,
@@ -39,7 +45,15 @@ fun BottomNavigation(
     )
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(bottomBar = {
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(text = topBarTitle)
+            })
+        },
+
+        bottomBar = {
         NavigationBar(
             containerColor = colorResource(id = R.color.teal_700)
         ) {
@@ -63,9 +77,7 @@ fun BottomNavigation(
                     selected = false,
                     onClick = {
                         coroutineScope.launch {
-                            LaunchedEffect(true){
                                 navController.navigate(item.route)
-                            }
                         }
                     }
                 )

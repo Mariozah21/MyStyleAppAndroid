@@ -20,6 +20,10 @@ class NavigationRouterImpl(
         navController.navigate(BottomNavItem.ChatsScreen.route)
     }
 
+    override fun navToWelcomeScreen() {
+        navController.navigate(Destination.WelcomeScreen.route)
+    }
+
     override fun navToSearchScreen() {
         navController.navigate(BottomNavItem.SearchScreen.route)
     }

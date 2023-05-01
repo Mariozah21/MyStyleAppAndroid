@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import cz.mendelu.pef.mystyleapp.R
-import cz.mendelu.pef.mystyleapp.navigation.Destination
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 
@@ -30,8 +26,8 @@ fun MainScreen(
     navigation: INavigationRouter,
     navController: NavController
 ){
-    BottomNavigation(navController = navController) {
-        MainScreenContent(paddingValues = it, navigation = navigation)
+    BottomNavigation(navController = navController, topBarTitle = "Main Screen") {
+        MainScreenContent(paddingValues = it, navigation = navigation )
     }
 }
 

@@ -5,6 +5,7 @@ interface INavigationRouter {
     fun navToMainScreen()
     fun navToMyProfileScreen()
     fun navToChatsScreen()
+    fun navToWelcomeScreen()
 
     fun navToSearchScreen()
     fun navToAddItemScreen()
