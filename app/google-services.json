@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "435015957237",
+    "firebase_url": "https://mystyleapp-9e036-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "mystyleapp-9e036",
     "storage_bucket": "mystyleapp-9e036.appspot.com"
   },
@@ -22,7 +23,7 @@
           }
         },
         {
-          "client_id": "435015957237-aekouh0hc1f5i5qorno9ckj9o8ms88m4.apps.googleusercontent.com",
+          "client_id": "435015957237-udr5isecsgm3qv4h2oh1h02hc86tltrt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -37,6 +38,13 @@
             {
               "client_id": "435015957237-aekouh0hc1f5i5qorno9ckj9o8ms88m4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "435015957237-acqfi0vh06na556kb1okf75pheb2g1tv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mendelu.pef.AI.xzahorja.Customia"
+              }
             }
           ]
         }

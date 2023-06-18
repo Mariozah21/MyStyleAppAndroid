@@ -24,6 +24,10 @@ class NavigationRouterImpl(
         navController.navigate(Destination.WelcomeScreen.route)
     }
 
+    override fun navToRegisterScreen() {
+        navController.navigate(Destination.RegisterScreen.route)
+    }
+
     override fun navToSearchScreen() {
         navController.navigate(BottomNavItem.SearchScreen.route)
     }
