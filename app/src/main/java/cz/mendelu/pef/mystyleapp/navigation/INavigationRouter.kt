@@ -9,6 +9,7 @@ interface INavigationRouter {
     fun navToRegisterScreen()
     fun navToSearchScreen()
     fun navToAddItemScreen()
+    fun navToMyItemsScreen()
 
 
 }

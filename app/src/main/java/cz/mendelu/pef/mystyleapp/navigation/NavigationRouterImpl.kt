@@ -33,6 +33,10 @@ class NavigationRouterImpl(
     }
 
     override fun navToAddItemScreen() {
-        navController.navigate(BottomNavItem.AddItemScreen.route)
+        navController.navigate(Destination.AddItemScreen.route)
+    }
+
+    override fun navToMyItemsScreen() {
+        navController.navigate(Destination.MyItemsScreen.route)
     }
 }

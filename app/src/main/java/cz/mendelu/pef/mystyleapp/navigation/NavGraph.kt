@@ -15,6 +15,7 @@ import cz.mendelu.pef.mystyleapp.ui.screens.AddItemScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.ChatScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.MainScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.MyProfileScreen
+import cz.mendelu.pef.mystyleapp.ui.screens.MyItemsScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.SearchScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.WelcomeScreen
 import cz.mendelu.pef.mystyleapp.ui.screens.RegisterScreen
@@ -57,6 +58,9 @@ fun NavGraph(
         composable(route = Destination.RegisterScreen.route){
             RegisterScreen()
         }
+        composable(route = Destination.MyItemsScreen.route){
+            MyItemsScreen(navigation,navController)
+        }
 
 
         //Bottom Navigation Bar
@@ -66,7 +70,7 @@ fun NavGraph(
         composable(route =BottomNavItem.MyProfileScreen.route){
             MyProfileScreen(navigation,navController)
         }
-        composable(route = BottomNavItem.AddItemScreen.route){
+        composable(route = Destination.AddItemScreen.route){
             AddItemScreen(navigation, navController)
         }
         composable(route = BottomNavItem.ChatsScreen.route){
