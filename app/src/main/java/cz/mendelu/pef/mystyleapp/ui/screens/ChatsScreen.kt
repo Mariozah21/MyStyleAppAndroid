@@ -1,6 +1,7 @@
 package cz.mendelu.pef.mystyleapp.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -23,24 +24,20 @@ fun ChatScreen(
     navigation: INavigationRouter,
     navController: NavController
 ){
-    BottomNavigation(navController = navController, topBarTitle = "Chat Screen") {
+    BottomNavigation(false,navigation,navController = navController, topBarTitle = "Chat Screen") {
         ChatScreenContent()
     }
 }
 @Composable
 fun ChatScreenContent(){
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Chat Screen",
+            text = "Will be implemented later",
             fontWeight = FontWeight.Bold,
             color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 20.sp
         )
