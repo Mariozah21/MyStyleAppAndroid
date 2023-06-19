@@ -30,7 +30,7 @@ fun MyProfileScreen(
     navigation: INavigationRouter,
     navController: NavController
 ){
-    BottomNavigation(navController = navController, topBarTitle = "My profile screen") {
+    BottomNavigation(false, navigation ,navController = navController, topBarTitle = "My profile screen") {
         MyProfileScreenContent(navigation = navigation)
     }
 
@@ -54,12 +54,13 @@ fun MyProfileScreenContent(navigation: INavigationRouter){
             fontSize = 20.sp
         )
 
-        Button(onClick = {
-            Firebase.auth.signOut()
-            user = null
-            navigation.navToWelcomeScreen()
-        },) {
-            Text("Sign out")
-        }
+
+    }
+    Button(onClick = {
+        Firebase.auth.signOut()
+        user = null
+        navigation.navToWelcomeScreen()
+    },) {
+        Text("Sign out")
     }
 }
