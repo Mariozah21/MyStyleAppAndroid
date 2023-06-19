@@ -1,8 +1,12 @@
 package cz.mendelu.pef.mystyleapp.ui.screens
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,27 +31,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
+import java.io.File
 import java.util.UUID
 
+
+
+@Composable
+fun AddItemScreen(
+    navigation: INavigationRouter,
+    navController: NavController
+){
+    BottomNavigation(navController = navController, topBarTitle = "Chat Screen") {
+        AddItemScreenContent()
+    }
+}
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun AddItemScreen() {
+fun AddItemScreenContent() {
     val title = remember { mutableStateOf("") }
     val price = remember { mutableStateOf("") }
     val category = remember { mutableStateOf("") }
     val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
+    val auth = FirebaseAuth.getInstance()
 
     val context = LocalContext.current
-    val auth = FirebaseAuth.getInstance()
-    val firestore = FirebaseFirestore.getInstance()
-    val storage = FirebaseStorage.getInstance()
 
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         selectedImageUri.value = uri
@@ -55,6 +72,17 @@ fun AddItemScreen() {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
+        // Image preview
+        selectedImageUri.value?.let { uri ->
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(align = Alignment.Center),
+                painter = rememberImagePainter(uri),
+                contentDescription = "Image Preview"
+            )
+        }
+
         TextField(
             value = title.value,
             onValueChange = { title.value = it },
@@ -74,14 +102,18 @@ fun AddItemScreen() {
         )
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
-            onClick = { imagePickerLauncher.launch("image/*") },
+            onClick = {
+                imagePickerLauncher.launch("image/*")
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Select Image")
         }
         Spacer(modifier = Modifier.padding(16.dp))
         Button(
-            onClick = { uploadItem(auth.currentUser?.email ?: "", title.value, price.value, category.value, selectedImageUri.value) },
+            onClick = {
+                uploadItem(auth.currentUser?.email ?: "",title.value, price.value, category.value, selectedImageUri.value)
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Upload Item")
@@ -92,26 +124,19 @@ fun AddItemScreen() {
 private fun uploadItem(email: String, title: String, price: String, category: String, imageUri: Uri?) {
     if (title.isEmpty() || price.isEmpty() || category.isEmpty() || imageUri == null) {
         // Handle validation error, e.g., show a Toast or display an error message
+
         return
     }
 
-    // Upload image to Firebase Storage
     val storageRef = FirebaseStorage.getInstance().reference
     val imageRef = storageRef.child("images/${UUID.randomUUID()}")
+
     val uploadTask = imageRef.putFile(imageUri)
 
-    uploadTask.continueWithTask { task ->
-        if (!task.isSuccessful) {
-            throw task.exception ?: RuntimeException("Failed to upload image.")
-        }
+    uploadTask.addOnSuccessListener { uploadTaskSnapshot ->
+        imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+            val imageUrl = downloadUrl.toString()
 
-        // Get the image URL from the uploaded file
-        imageRef.downloadUrl
-    }.addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            val imageUrl = task.result.toString()
-
-            // Create item data
             val item = hashMapOf(
                 "email" to email,
                 "title" to title,
@@ -120,19 +145,19 @@ private fun uploadItem(email: String, title: String, price: String, category: St
                 "imageUrl" to imageUrl
             )
 
-            // Save item data to Firestore
             FirebaseFirestore.getInstance().collection("Items")
                 .add(item)
                 .addOnSuccessListener {
                     // Item data saved successfully
+
                 }
                 .addOnFailureListener { e ->
                     // Error saving item data
-                    // Handle the error appropriately (e.g., show a Toast)
+
                 }
-        } else {
-            // Error uploading image
-            // Handle the error appropriately (e.g., show a Toast)
         }
+    }.addOnFailureListener { e ->
+        // Error uploading image
+
     }
 }

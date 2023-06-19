@@ -67,7 +67,7 @@ fun NavGraph(
             MyProfileScreen(navigation,navController)
         }
         composable(route = BottomNavItem.AddItemScreen.route){
-            AddItemScreen()
+            AddItemScreen(navigation, navController)
         }
         composable(route = BottomNavItem.ChatsScreen.route){
             ChatScreen(navigation,navController)
