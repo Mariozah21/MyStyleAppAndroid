@@ -5,7 +5,7 @@ sealed class Destination(val route: String) {
     object MyProfileScreen : Destination(route = "my_profile")
     object WelcomeScreen :Destination(route = "welcome_screen")
     object AddItemScreen :Destination(route = "add_item_screen")
-
+    object DetailView: Destination(route = "detail_view")
     object RegisterScreen : Destination(route = "register_screen")
     object MyItemsScreen : Destination(route = "my_items_screen")
 

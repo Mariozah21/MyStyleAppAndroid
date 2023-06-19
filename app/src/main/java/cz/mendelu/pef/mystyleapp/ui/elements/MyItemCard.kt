@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,13 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.mendelu.pef.mystyleapp.data.Item
 import coil.compose.rememberImagePainter
+import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyItemCard(item: Item) {
+fun MyItemCard(
+    item: Item,
+    navigation: INavigationRouter,
+    username: String = "",
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
+        onClick = {
+            navigation.navToDetailView(item.imageUrl,item.title,item.price.toString(),username)
+        }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Image(

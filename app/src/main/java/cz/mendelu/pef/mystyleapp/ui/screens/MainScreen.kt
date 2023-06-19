@@ -84,7 +84,7 @@ fun MainScreenContent(
                     LaunchedEffect(item.email) {
                         username.value = viewModel.fetchUsernameByEmail(item.email) ?: ""
                     }
-                    ItemCard(item, username.value)
+                    ItemCard(item, username.value, navigation)
                 }
             }
         }

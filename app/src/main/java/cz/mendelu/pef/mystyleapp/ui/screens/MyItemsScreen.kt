@@ -69,7 +69,7 @@ fun MyItemsScreenContent(
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = paddingValues) {
                 items(items = items) { item ->
-                    MyItemCard(item = item)
+                    MyItemCard(item = item, navigation)
                 }
             }
         }

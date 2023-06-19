@@ -39,23 +39,7 @@ fun MyProfileScreen(
 @Composable
 fun MyProfileScreenContent(navigation: INavigationRouter){
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "My Profile Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
 
-
-    }
     Button(onClick = {
         Firebase.auth.signOut()
         user = null
