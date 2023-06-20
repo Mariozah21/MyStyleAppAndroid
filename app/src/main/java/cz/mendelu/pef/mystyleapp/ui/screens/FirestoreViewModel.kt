@@ -33,7 +33,6 @@ class FirestoreViewModel(
     val itemsState: List<Item> get() = _itemsState
     val currentUserEmail: String
         get() = FirebaseAuth.getInstance().currentUser?.email ?: ""
-
     val myItems: MutableState<List<Item>> = mutableStateOf(emptyList())
     init {
         fetchItems()
@@ -151,5 +150,7 @@ class FirestoreViewModel(
             // Handle case when current user email is empty
         }
     }
+
+
 
 }
