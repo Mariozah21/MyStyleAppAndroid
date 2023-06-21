@@ -1,10 +1,7 @@
 package cz.mendelu.pef.mystyleapp.navigation
 
 import androidx.navigation.NavController
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import cz.mendelu.pef.mystyleapp.data.Item
-import cz.mendelu.pef.mystyleapp.data.JsonItem
+
 
 class NavigationRouterImpl(
     private val navController: NavController) : INavigationRouter {
@@ -44,13 +41,8 @@ class NavigationRouterImpl(
         navController.navigate(Destination.MyItemsScreen.route)
     }
 
-    override fun navToDetailView(image: String, title: String, price: String, username: String) {
-        val moshi: Moshi = Moshi.Builder().build()
-        val jsonAdapter: JsonAdapter<JsonItem> =
-            moshi.adapter(JsonItem::class.java)
-        val jsonString = jsonAdapter.toJson(JsonItem(title,price,username))
-
-        navController.navigate(Destination.DetailView.route + "/" + jsonString)
+    override fun navToDetailView(id: String) {
+        navController.navigate(Destination.DetailView.route + "/" + id)
     }
 
     override fun navBack() {

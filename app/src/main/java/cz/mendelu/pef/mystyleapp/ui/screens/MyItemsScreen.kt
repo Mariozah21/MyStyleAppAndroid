@@ -67,7 +67,7 @@ fun MyItemsScreenContent(
                 style = MaterialTheme.typography.bodyMedium
             )
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = paddingValues) {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(items = items) { item ->
                     MyItemCard(item = item, navigation)
                 }

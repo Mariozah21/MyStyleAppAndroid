@@ -1,6 +1,5 @@
 package cz.mendelu.pef.mystyleapp.navigation
 
-import cz.mendelu.pef.mystyleapp.data.Item
 
 
 interface INavigationRouter {
@@ -13,7 +12,7 @@ interface INavigationRouter {
     fun navToSearchScreen()
     fun navToAddItemScreen()
     fun navToMyItemsScreen()
-    fun navToDetailView(image: String, title: String, price: String, username: String)
+    fun navToDetailView(id: String)
     fun navBack()
 
 

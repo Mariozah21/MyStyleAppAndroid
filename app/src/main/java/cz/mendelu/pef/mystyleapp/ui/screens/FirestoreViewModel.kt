@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,7 +46,9 @@ class FirestoreViewModel(
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val items = querySnapshot.documents.mapNotNull { document ->
-                    document.toObject(Item::class.java)
+                    val itemId = document.id // Get the document ID
+                    val item = document.toObject(Item::class.java)
+                    item?.copy(id = itemId) // Set the ID in the Item object
                 }
                 _itemsState.clear()
                 _itemsState.addAll(items)
@@ -59,11 +63,15 @@ class FirestoreViewModel(
         title: String,
         price: String,
         category: String,
+        description: String?,
+        stockCount: Int?,
+        color: String,
+        size: String,
         imageUri: Uri?,
         onSuccess: () -> Unit,
         onFailure: () -> Unit
     ) {
-        if (title.isEmpty() || price.isEmpty() || category.isEmpty() || imageUri == null) {
+        if (title.isEmpty() || price.isEmpty() || category.isEmpty() || imageUri == null || color.isEmpty() || size.isEmpty()) {
             // Handle validation error, e.g., show a Toast or display an error message
             onFailure()
             return
@@ -84,8 +92,14 @@ class FirestoreViewModel(
                     "title" to title,
                     "price" to price.toDouble(),
                     "category" to category,
-                    "imageUrl" to imageUrl
+                    "imageUrl" to imageUrl,
+                    "color" to color,
+                    "size" to size,
                 )
+
+                // Add optional fields if they are not null or empty
+                description?.let { item["description"] = it }
+                stockCount?.let { item["stockCount"] = it }
 
                 itemsCollection.add(item)
                     .addOnSuccessListener {
@@ -140,7 +154,11 @@ class FirestoreViewModel(
                 .whereEqualTo("email", currentUserEmail)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                    val fetchedItems = querySnapshot.toObjects(Item::class.java)
+                    val fetchedItems = querySnapshot.documents.mapNotNull { document ->
+                        val itemId = document.id // Get the document ID
+                        val item = document.toObject(Item::class.java)
+                        item?.copy(id = itemId) // Set the ID in the Item object
+                    }
                     myItems.value = fetchedItems
                 }
                 .addOnFailureListener { e ->
@@ -150,7 +168,4 @@ class FirestoreViewModel(
             // Handle case when current user email is empty
         }
     }
-
-
-
 }

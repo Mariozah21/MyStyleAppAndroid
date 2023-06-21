@@ -1,21 +1,16 @@
 package cz.mendelu.pef.mystyleapp.ui.screens
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,8 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,45 +27,29 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
-import cz.mendelu.pef.mystyleapp.ui.components.Category
+import cz.mendelu.pef.mystyleapp.ui.components.Constants
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
-import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
-import cz.mendelu.pef.mystyleapp.ui.elements.CategoryDropdownMenu
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.compose.viewModel
-import java.io.File
-import java.util.UUID
+
 
 
 
@@ -96,10 +73,23 @@ fun AddItemScreenContent(
 ) {
     val title = remember { mutableStateOf("") }
     val price = remember { mutableStateOf("") }
-    val (category, setCategory) = remember { mutableStateOf("") }
     val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
     val auth = FirebaseAuth.getInstance()
     val (isUploading, setIsUploading) = remember { mutableStateOf(false) }
+    val description = remember { mutableStateOf("") }
+    val stockCount = remember { mutableStateOf("") }
+    //Color selector
+    val colors = Constants.colors
+    val selectedColor = remember { mutableStateOf("") }
+    val isColorDropdownExpanded = remember { mutableStateOf(false) }
+    //SizeSelector
+    val sizes = Constants.sizes
+    val selectedSize = remember { mutableStateOf("") }
+    val isSizeDropdownExpanded = remember { mutableStateOf(false) }
+    //CategorySelector
+    val categories = Constants.categories
+    val selectedCategory = remember { mutableStateOf("") }
+    val isCategoryDropDownExpanded = remember { mutableStateOf(false) }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         selectedImageUri.value = uri
@@ -120,8 +110,6 @@ fun AddItemScreenContent(
                     width = 2.dp,
                     color = Color.LightGray,
                     shape = MaterialTheme.shapes.medium,
-                    // Add dashed line effect if needed
-                    //borderStroke = BorderStroke(2.dp, Color.LightGray, PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f))
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -145,22 +133,27 @@ fun AddItemScreenContent(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        if (title.value.length>45) {
+            Snackbar {
+                Text("Text is too long!")
+            }
+        }
         TextField(
             value = title.value,
-            onValueChange = { title.value = it },
+            onValueChange = { if (it.length <= 45) title.value = it },
             label = { Text("Title") },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.White,
+                textColor = MaterialTheme.colorScheme.onBackground,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
             ),
             singleLine = true
         )
@@ -171,13 +164,20 @@ fun AddItemScreenContent(
             value = price.value,
             onValueChange = { input ->
                 val filteredInput = input.filter { it.isDigit() || it == '.' }
-                price.value = filteredInput
+                val decimalIndex = filteredInput.indexOf('.')
+                if (decimalIndex != -1 && filteredInput.length - decimalIndex > 3) {
+                    // Limit the number of digits after the decimal point to 2
+                    price.value = filteredInput.substring(0, decimalIndex + 3)
+                } else {
+                    price.value = filteredInput
+                }
             },
             label = { Text("Price") },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.White,
+                textColor = MaterialTheme.colorScheme.onBackground,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
@@ -191,28 +191,184 @@ fun AddItemScreenContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        CategoryDropdownMenu { selectedCategory ->
-            setCategory(selectedCategory)
-        }
+        //Category dropdown
+            //DropDown box
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(Alignment.Center)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .clickable { isCategoryDropDownExpanded.value = true }
+            ) {
+                    DropdownMenu(
+                        expanded = isCategoryDropDownExpanded.value,
+                        onDismissRequest = { isCategoryDropDownExpanded.value = false },
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .fillMaxWidth()
+                    ) {
+                        categories.forEach { categori ->
+                            DropdownMenuItem(
+                                text = { Text(text = categori)},
+                                onClick = {
+                                    selectedCategory.value = categori
+                                    isCategoryDropDownExpanded.value = false
+                                }
+                            )
+                        }
+                    }
+                if (selectedSize.value.isNotEmpty()) {
+                    Text(
+                        text = "Category: ${selectedCategory.value}",
+                        modifier = Modifier
+                            .padding(16.dp).fillMaxWidth(),
 
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }else{
+                    Text(
+                        text = "Tap to select category",
+                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = description.value,
+            onValueChange = { newValue ->
+                if (newValue.length <= 300) {
+                    description.value = newValue
+                }
+            },
+            label = { Text("Description") },
+            modifier = Modifier.fillMaxWidth(),
+            textStyle = MaterialTheme.typography.bodyLarge,
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = MaterialTheme.colorScheme.onBackground,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        //Color Dropdown
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .clickable { isColorDropdownExpanded.value = true }
+        ) {
+                    DropdownMenu(
+                        expanded = isColorDropdownExpanded.value,
+                        onDismissRequest = { isColorDropdownExpanded.value = false } ,
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .fillMaxWidth()
+                    ) {
+                        colors.forEach { color ->
+                            DropdownMenuItem(
+                                text = { Text(text = color) },
+                                onClick = {
+                                    selectedColor.value = color
+                                    isColorDropdownExpanded.value = false
+                                }
+                            )
+                        }
+                    }
+
+            if (selectedColor.value.isNotEmpty()) {
+                Text(
+                    text = "Color: ${selectedColor.value}",
+                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }else{
+                Text(
+                    text = " Tap to select Color",
+                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        //DropDown box
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .clickable { isSizeDropdownExpanded.value = true }
+        ) {
+                DropdownMenu(
+                    expanded = isSizeDropdownExpanded.value,
+                    onDismissRequest = { isSizeDropdownExpanded.value = false },
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .fillMaxWidth()
+                ) {
+                    sizes.forEach { size ->
+                        DropdownMenuItem(
+                            text = { Text(text = size)},
+                            onClick = {
+                                selectedSize.value = size
+                                isSizeDropdownExpanded.value = false
+                            }
+                        )
+                    }
+                }
+            if (selectedSize.value.isNotEmpty()) {
+                Text(
+                    text = "Size: ${selectedSize.value}",
+                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }else{
+                Text(
+                    text = "Tap to select size",
+                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+        //end of dropdown box
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
                 setIsUploading(true)
                 viewModel.uploadItem(
-                    auth.currentUser?.email ?: "",
-                    title.value,
-                    price.value,
-                    category,
-                    selectedImageUri.value,
-                    onSuccess = { // Success callback
+                    email = auth.currentUser?.email ?: "",
+                    title = title.value,
+                    price = price.value,
+                    category = selectedCategory.value,
+                    description = description.value.takeIf { it.isNotBlank() },
+                    stockCount = stockCount.value.takeIf { it.isNotBlank() }?.toIntOrNull(),
+                    color = selectedColor.value,
+                    size = selectedSize.value,
+                    imageUri = selectedImageUri.value,
+                    onSuccess = {
                         setIsUploading(false)
-                        navigation.navToMainScreen() // Navigate to the mainScreen
+                        navigation.navToMyItemsScreen()
+
                     },
-                    onFailure = { // Failure callback
+                    onFailure = {
                         setIsUploading(false)
-                        // Inform the user about the failure, e.g., show a Toast or display an error message
+                        Log.e("UploadError","Something didnt upload ")
+                        // Handle failure, e.g., show a Toast or display an error message
                     }
                 )
             },
@@ -236,3 +392,4 @@ fun AddItemScreenContent(
         }
     }
 }
+

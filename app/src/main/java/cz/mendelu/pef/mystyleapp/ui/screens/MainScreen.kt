@@ -12,15 +12,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.data.Item
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.components.Constants
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 import cz.mendelu.pef.mystyleapp.ui.elements.ItemCard
 import cz.mendelu.pef.mystyleapp.ui.elements.MyItemCard
@@ -63,6 +69,8 @@ fun MainScreenContent(
     viewModel: FirestoreViewModel
 ) {
     val items = viewModel.itemsState.shuffled().take(20) // Limit the number of items to 20
+    val filter = remember { mutableStateOf<String?>(null) }
+    val selectedCategory = remember { mutableStateOf<String?>(null) }
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -76,7 +84,10 @@ fun MainScreenContent(
                 style = MaterialTheme.typography.bodyMedium
             )
         } else {
-            LazyColumn(modifier = Modifier.padding(paddingValues)) {
+            LazyColumn() {
+                item {
+                    ScrollableButtonRow(selectedCategory)
+                }
                 items(items = items) { item ->
                     val username = remember(item.email) {
                         mutableStateOf("")
@@ -84,10 +95,49 @@ fun MainScreenContent(
                     LaunchedEffect(item.email) {
                         username.value = viewModel.fetchUsernameByEmail(item.email) ?: ""
                     }
-                    ItemCard(item, username.value, navigation)
+                    if (selectedCategory.value == null || item.category == selectedCategory.value) {
+                        ItemCard(item, username.value, navigation)
+                    }
+
                 }
             }
         }
     }
 
+}
+@Composable
+fun ScrollableButtonRow(selectedCategory: MutableState<String?>) {
+    val buttonTitles = Constants.categories
+
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(buttonTitles) { title ->
+            Button(
+                onClick = { if(selectedCategory.value == title){
+                    selectedCategory.value = null
+                    }else {
+                        selectedCategory.value = title
+                    }},
+                modifier = Modifier.height(36.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor =
+                    if (selectedCategory.value == title || selectedCategory.value == null) {
+                        Color.Cyan
+                    } else {
+                        Color.LightGray
+                    }
+                )
+
+
+            ) {
+                Text(
+                    text = title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
 }
