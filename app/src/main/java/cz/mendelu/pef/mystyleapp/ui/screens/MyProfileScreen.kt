@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,7 +44,9 @@ fun MyProfileScreen(
     navController: NavController,
     viewModel: FirestoreViewModel = getViewModel()
 ){
-    BottomNavigation(false, navigation ,navController = navController, topBarTitle = "My profile screen") {
+    BottomNavigation(false, navigation ,navController = navController, topBarTitle = stringResource(
+            R.string.my_profile_app_bar_title)
+        ) {
         MyProfileScreenContent(navigation = navigation, viewModel = viewModel)
     }
 
@@ -86,17 +89,11 @@ fun MyProfileScreenContent(navigation: INavigationRouter,viewModel: FirestoreVie
             )
 
             // Description (if available)
-            description?.let { userDescription ->
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
+
 
             // Number of items they are selling
             Text(
-                text = "Items for sale: ${myItems.size}",
+                text = stringResource(R.string.my_profile_items_for_sale) + myItems.size.toString(),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -111,7 +108,7 @@ fun MyProfileScreenContent(navigation: INavigationRouter,viewModel: FirestoreVie
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text("Sign out")
+            Text(stringResource(R.string.my_profile_sign_out))
         }
     }
 }

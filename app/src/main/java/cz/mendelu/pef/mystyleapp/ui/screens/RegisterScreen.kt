@@ -19,8 +19,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import cz.mendelu.pef.mystyleapp.R
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,21 +46,21 @@ fun RegisterScreen(
         TextField(
             value = username,
             onValueChange = { username = it },
-            placeholder = { Text("Username") },
+            placeholder = { Text(stringResource(R.string.register_username)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = { Text("Email") },
+            placeholder = { Text(stringResource(R.string.register_email)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = { Text("Password") },
+            placeholder = { Text(stringResource(R.string.register_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation() // Hide password input
         )
@@ -66,14 +68,14 @@ fun RegisterScreen(
         TextField(
             value = repeatPassword,
             onValueChange = { repeatPassword = it },
-            placeholder = { Text("Repeat Password") },
+            placeholder = { Text(stringResource(R.string.register_repeat_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation() // Hide password input
         )
         if (password != repeatPassword) {
             passwordMatchError = true
             Text(
-                text = "The password you entered doesn't match",
+                text = stringResource(R.string.the_register_passwords_match),
                 color = Color.Red,
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -91,7 +93,7 @@ fun RegisterScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Register")
+            Text(stringResource(R.string.register_register))
         }
     }
 }

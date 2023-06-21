@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -24,7 +25,7 @@ fun ChatScreen(
     navigation: INavigationRouter,
     navController: NavController
 ){
-    BottomNavigation(false,navigation,navController = navController, topBarTitle = "Chat Screen") {
+    BottomNavigation(false,navigation,navController = navController, topBarTitle = stringResource(R.string.chat_screen_title)) {
         ChatScreenContent()
     }
 }
@@ -35,7 +36,7 @@ fun ChatScreenContent(){
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Will be implemented later",
+            text = stringResource(R.string.chat_screen_will_be_implemented_later),
             fontWeight = FontWeight.Bold,
             color = Color.White,
             textAlign = TextAlign.Center,

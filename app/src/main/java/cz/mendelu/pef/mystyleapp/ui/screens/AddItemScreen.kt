@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
+import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.components.Constants
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
@@ -61,7 +63,7 @@ fun AddItemScreen(
     navController: NavController,
     viewModel: FirestoreViewModel = getViewModel(),
 ){
-    BackArrowScreen(topBarTitle = "Add items", onBackClick = { navigation.navToMyItemsScreen() }) {
+    BackArrowScreen(topBarTitle = stringResource(R.string.add_items_screen_title), onBackClick = { navigation.navToMyItemsScreen() }) {
         AddItemScreenContent(navigation, viewModel)
     }
 }
@@ -125,7 +127,7 @@ fun AddItemScreenContent(
             } else {
                 // Text when no image is selected
                 Text(
-                    text = "Tap to upload image",
+                    text = stringResource(R.string.add_item_tap_to_upload_image),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.LightGray
                 )
@@ -135,13 +137,13 @@ fun AddItemScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
         if (title.value.length>45) {
             Snackbar {
-                Text("Text is too long!")
+                Text(stringResource(R.string.add_item_text_is_too_long))
             }
         }
         TextField(
             value = title.value,
             onValueChange = { if (it.length <= 45) title.value = it },
-            label = { Text("Title") },
+            label = { Text(stringResource(R.string.add_item_title)) },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.textFieldColors(
@@ -172,7 +174,7 @@ fun AddItemScreenContent(
                     price.value = filteredInput
                 }
             },
-            label = { Text("Price") },
+            label = { Text(stringResource(R.string.add_item_price)) },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.textFieldColors(
@@ -219,7 +221,7 @@ fun AddItemScreenContent(
                     }
                 if (selectedSize.value.isNotEmpty()) {
                     Text(
-                        text = "Category: ${selectedCategory.value}",
+                        text = stringResource(R.string.add_item_category) + selectedCategory.value,
                         modifier = Modifier
                             .padding(16.dp).fillMaxWidth(),
 
@@ -228,7 +230,7 @@ fun AddItemScreenContent(
                     )
                 }else{
                     Text(
-                        text = "Tap to select category",
+                        text = stringResource(R.string.add_item_tap_to_select_category),
                         modifier = Modifier.padding(16.dp).fillMaxWidth(),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground
@@ -243,7 +245,7 @@ fun AddItemScreenContent(
                     description.value = newValue
                 }
             },
-            label = { Text("Description") },
+            label = { Text(stringResource(R.string.add_item_description)) },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.bodyLarge,
             colors = TextFieldDefaults.textFieldColors(
@@ -288,14 +290,14 @@ fun AddItemScreenContent(
 
             if (selectedColor.value.isNotEmpty()) {
                 Text(
-                    text = "Color: ${selectedColor.value}",
+                    text = stringResource(R.string.add_item_color) + selectedColor.value,
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }else{
                 Text(
-                    text = " Tap to select Color",
+                    text = stringResource(R.string.add_item_tap_to_select_color),
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
@@ -330,14 +332,14 @@ fun AddItemScreenContent(
                 }
             if (selectedSize.value.isNotEmpty()) {
                 Text(
-                    text = "Size: ${selectedSize.value}",
+                    text = stringResource(R.string.add_item_size) + selectedSize.value,
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }else{
                 Text(
-                    text = "Tap to select size",
+                    text = stringResource(R.string.add_item_tap_to_select_size),
                     modifier = Modifier.padding(16.dp).fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
@@ -367,7 +369,6 @@ fun AddItemScreenContent(
                     },
                     onFailure = {
                         setIsUploading(false)
-                        Log.e("UploadError","Something didnt upload ")
                         // Handle failure, e.g., show a Toast or display an error message
                     }
                 )
@@ -385,7 +386,8 @@ fun AddItemScreenContent(
                 )
             }
             Text(
-                text = if (isUploading) "Uploading..." else "Upload Item",
+                text = if (isUploading) stringResource(R.string.add_item_uploading) else stringResource(
+                                    R.string.add_item_upload_item),
                 style = MaterialTheme.typography.bodyMedium,
                 fontSize = 14.sp
             )

@@ -90,14 +90,14 @@ fun WelcomeScreenContent(
         TextField(
             value = email, // Add a state to hold the entered username
             onValueChange = { email = it },
-            placeholder = { Text("Email") },
+            placeholder = { Text(stringResource(R.string.welcome_email)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = password, // Add a state to hold the entered password
             onValueChange = { password = it },
-            placeholder = { Text("Password") },
+            placeholder = { Text(stringResource(R.string.welcome_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
         )
@@ -108,7 +108,7 @@ fun WelcomeScreenContent(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text(stringResource(R.string.welcome_login))
         }
         Spacer(modifier = Modifier.height(8.dp))
         val underlineText = AnnotatedString.Builder().apply {
@@ -118,7 +118,7 @@ fun WelcomeScreenContent(
                     color = Color.Blue
                 )
             ) {
-                append("Register")
+                append(stringResource(R.string.welcome_register))
             }
         }.toAnnotatedString()
 
@@ -145,7 +145,7 @@ fun WelcomeScreenContent(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Sign in via Google")
+                Text(stringResource(R.string.welcome_sign_in_via_google))
             }
         } else {
             navigation.navToMainScreen()

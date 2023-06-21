@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,7 +45,7 @@ fun MyItemsScreen(
     navController: NavController,
     viewModel: FirestoreViewModel = getViewModel()
 ) {
-    BottomNavigation(true,navigation,navController = navController, topBarTitle = "My Items Screen") {
+    BottomNavigation(true,navigation,navController = navController, topBarTitle = stringResource(R.string.my_items_app_bar_title)) {
         MyItemsScreenContent(paddingValues = it, navigation = navigation ,viewModel = viewModel )
     }
 }
@@ -59,7 +60,7 @@ fun MyItemsScreenContent(
     Box(modifier = Modifier.fillMaxSize()) {
         if (items.isEmpty()) {
             Text(
-                text = "You are not selling any items",
+                text = stringResource(R.string.my_items_you_are_not_selling_any_items),
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),

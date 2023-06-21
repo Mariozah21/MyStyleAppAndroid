@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -58,7 +59,7 @@ fun MainScreen(
     navController: NavController,
     viewModel: FirestoreViewModel = getViewModel(),
 ){
-    BottomNavigation(false,navigation,navController = navController, topBarTitle = "Main Screen") {
+    BottomNavigation(false,navigation,navController = navController, topBarTitle = stringResource(R.string.main_screen_app_bar_title)) {
         MainScreenContent(paddingValues = it, navigation = navigation ,viewModel = viewModel )
     }
 }
@@ -76,7 +77,7 @@ fun MainScreenContent(
     Box(modifier = Modifier.fillMaxSize()) {
         if (items.isEmpty()) {
             Text(
-                text = "You are not selling any items",
+                text = stringResource(R.string.main_screen_you_are_not_selling_any_items),
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),

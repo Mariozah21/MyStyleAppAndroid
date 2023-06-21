@@ -11,10 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.data.Item
 import cz.mendelu.pef.mystyleapp.navigation.Destination
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
@@ -28,7 +30,7 @@ fun DetailView(
 ){
     val viewModel: DetailViewViewModel = remember { DetailViewViewModel(id) }
 
-    BackArrowScreen(topBarTitle = "Detail View", onBackClick = { navigation.navBack() }) {
+    BackArrowScreen(topBarTitle = stringResource(R.string.detail_view_app_bar_title), onBackClick = { navigation.navBack() }) {
         DetailViewContent(
             paddingValues = it,
             id = id,
@@ -77,7 +79,7 @@ fun DetailViewContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row() {
-                    Text(text = "Price:")
+                    Text(text = stringResource(R.string.detail_view_price))
                     Text(
                         text = "€ " + "${item.price}",
                         style = MaterialTheme.typography.labelLarge,
@@ -85,18 +87,19 @@ fun DetailViewContent(
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                InfoElement(title = "Color" , content = item.color,45.dp)
+                InfoElement(title = stringResource(R.string.detail_view_color) , content = item.color,45.dp)
                 Spacer(modifier = Modifier.height(8.dp))
                 if(item.stockCount == null ) {
-                    InfoElement(title = "Stock", content = "Stock info is currently not available",45.dp)
+                    InfoElement(title = stringResource(R.string.detail_view_stock), content = stringResource(
+                                            R.string.detail_view_stock_info_is_currently_not_available),45.dp)
                 } else{
-                    InfoElement(title = "Stock", content = item.stockCount.toString(),45.dp)
+                    InfoElement(title = stringResource(R.string.detail_view_stock), content = item.stockCount.toString(),45.dp)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
-                InfoElement(title = "Size", content = item.size,48.dp)
+                InfoElement(title = stringResource(R.string.detail_view_size), content = item.size,48.dp)
                 Spacer(modifier = Modifier.height(8.dp))
-                InfoElement(title = "Description", content = item.description, 37.dp)
+                InfoElement(title = stringResource(R.string.detail_view_description), content = item.description, 37.dp)
 
             }
         }
