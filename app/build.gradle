@@ -1,12 +1,17 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-}
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
 
+    // For Hit
+
+    // Navigation using: https://github.com/raamcosta/compose-destinations
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
+}
 android {
     namespace 'cz.mendelu.pef.mystyleapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "cz.mendelu.pef.mystyleapp"
@@ -28,17 +33,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.1.1'
+        kotlinCompilerExtensionVersion '1.4.3'
     }
     packagingOptions {
         resources {
@@ -71,6 +76,9 @@ dependencies {
 // end compose
 // Navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.8.42-beta")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.8.42-beta")
+
 // Koin
     def koin_version = "3.1.5"
     implementation "io.insert-koin:koin-core:$koin_version"
@@ -103,3 +111,7 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+kapt {
+    correctErrorTypes = true
+}
