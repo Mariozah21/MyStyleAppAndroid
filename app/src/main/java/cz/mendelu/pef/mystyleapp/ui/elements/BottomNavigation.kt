@@ -27,17 +27,23 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.navigation.BottomNavItem
 import cz.mendelu.pef.mystyleapp.navigation.Destination
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.AddItemScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.ChatScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MainScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyItemsScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyProfileScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.SearchScreenDestination
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigation(
     showFAB: Boolean,
-    navigation: INavigationRouter,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     topBarTitle: String,
     content: @Composable (paddingValues: PaddingValues) -> Unit,
 ){
@@ -84,11 +90,11 @@ fun BottomNavigation(
                     onClick = {
                         coroutineScope.launch {
                             when (item) {
-                                BottomNavItem.MainScreen -> navigation.navToMainScreen()
-                                BottomNavItem.MyProfileScreen -> navigation.navToMyProfileScreen()
-                                BottomNavItem.ChatsScreen -> navigation.navToChatsScreen()
-                                BottomNavItem.SearchScreen -> navigation.navToSearchScreen()
-                                BottomNavItem.MyItemsScreen -> navigation.navToMyItemsScreen()
+                                BottomNavItem.MainScreen -> navigator.navigate(MainScreenDestination)
+                                BottomNavItem.MyProfileScreen -> navigator.navigate(MyProfileScreenDestination)
+                                BottomNavItem.ChatsScreen -> navigator.navigate(ChatScreenDestination)
+                                BottomNavItem.SearchScreen -> navigator.navigate(SearchScreenDestination)
+                                BottomNavItem.MyItemsScreen -> navigator.navigate(MyItemsScreenDestination)
                             }
                         }
                     }
@@ -105,7 +111,7 @@ fun BottomNavigation(
         content(innerPadding)
         if (showFAB) {
             FloatingActionButton(
-                onClick = {  navigation.navToAddItemScreen()},
+                onClick = {  navigator.navigate(AddItemScreenDestination)},
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp)

@@ -46,31 +46,33 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.components.Constants
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyItemsScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 
 
 
 
-
+@Destination
 @Composable
 fun AddItemScreen(
-    navigation: INavigationRouter,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel = getViewModel(),
 ){
-    BackArrowScreen(topBarTitle = stringResource(R.string.add_items_screen_title), onBackClick = { navigation.navToMyItemsScreen() }) {
-        AddItemScreenContent(navigation, viewModel)
+    BackArrowScreen(topBarTitle = stringResource(R.string.add_items_screen_title), onBackClick = { navigator.navigate(MyItemsScreenDestination) }) {
+        AddItemScreenContent(navigator, viewModel)
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItemScreenContent(
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel
 ) {
     val title = remember { mutableStateOf("") }
@@ -364,7 +366,7 @@ fun AddItemScreenContent(
                     imageUri = selectedImageUri.value,
                     onSuccess = {
                         setIsUploading(false)
-                        navigation.navToMyItemsScreen()
+                        navigator.navigate(MyItemsScreenDestination)
 
                     },
                     onFailure = {

@@ -16,16 +16,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 
+@Destination
 @Composable
 fun SearchScreen(
-    navigation: INavigationRouter,
-    navController: NavController
+    navigator: DestinationsNavigator
 ){
-    BottomNavigation(false,navigation,navController = navController, topBarTitle = "Search Screen") {
+    BottomNavigation(false,navigator, topBarTitle = "Search Screen") {
         SearchScreenContent()
     }
 }

@@ -18,13 +18,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cz.mendelu.pef.mystyleapp.data.Item
 import coil.compose.rememberImagePainter
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.DetailViewDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyItemCard(
     item: Item,
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
 ) {
     Card(
         modifier = Modifier
@@ -32,7 +34,7 @@ fun MyItemCard(
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
         onClick = {
-            navigation.navToDetailView(item.id)
+            navigator.navigate(DetailViewDestination(id=item.id))
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

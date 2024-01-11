@@ -32,31 +32,33 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.data.Item
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.WelcomeScreenDestination
 import org.koin.androidx.compose.getViewModel
 
+@Destination
 @Composable
 fun MyProfileScreen(
-    navigation: INavigationRouter,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel = getViewModel()
 ){
-    BottomNavigation(false, navigation ,navController = navController, topBarTitle = stringResource(
+    BottomNavigation(false, navigator, topBarTitle = stringResource(
             R.string.my_profile_app_bar_title)
         ) {
-        MyProfileScreenContent(navigation = navigation, viewModel = viewModel)
+        MyProfileScreenContent(navigator, viewModel = viewModel)
     }
 
 }
 
 @Composable
-fun MyProfileScreenContent(navigation: INavigationRouter,viewModel: FirestoreViewModel) {
+fun MyProfileScreenContent(navigator: DestinationsNavigator,viewModel: FirestoreViewModel) {
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
     val myItems by viewModel.myItems
-    val description: String = ""
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -104,7 +106,7 @@ fun MyProfileScreenContent(navigation: INavigationRouter,viewModel: FirestoreVie
             onClick = {
                 Firebase.auth.signOut()
                 user = null
-                navigation.navToWelcomeScreen()
+                navigator.navigate(WelcomeScreenDestination)
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {

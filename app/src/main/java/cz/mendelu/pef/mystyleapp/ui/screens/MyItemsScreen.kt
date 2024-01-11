@@ -31,6 +31,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
@@ -38,21 +40,20 @@ import cz.mendelu.pef.mystyleapp.ui.elements.ItemCard
 import cz.mendelu.pef.mystyleapp.ui.elements.MyItemCard
 import org.koin.androidx.compose.getViewModel
 
-
+@Destination
 @Composable
 fun MyItemsScreen(
-    navigation: INavigationRouter,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel = getViewModel()
 ) {
-    BottomNavigation(true,navigation,navController = navController, topBarTitle = stringResource(R.string.my_items_app_bar_title)) {
-        MyItemsScreenContent(paddingValues = it, navigation = navigation ,viewModel = viewModel )
+    BottomNavigation(true,navigator, topBarTitle = stringResource(R.string.my_items_app_bar_title)) {
+        MyItemsScreenContent(paddingValues = it, navigator ,viewModel = viewModel )
     }
 }
 @Composable
 fun MyItemsScreenContent(
     paddingValues: PaddingValues,
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel
 ) {
     val items = viewModel.myItems.value // Limit the number of items to 20
@@ -70,7 +71,7 @@ fun MyItemsScreenContent(
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(items = items) { item ->
-                    MyItemCard(item = item, navigation)
+                    MyItemCard(item = item, navigator)
                 }
             }
         }

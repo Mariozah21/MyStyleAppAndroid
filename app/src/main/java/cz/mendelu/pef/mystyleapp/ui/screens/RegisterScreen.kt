@@ -22,9 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
 import cz.mendelu.pef.mystyleapp.R
 import org.koin.androidx.compose.getViewModel
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(

@@ -15,8 +15,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import cz.mendelu.pef.mystyleapp.navigation.Destination
-import cz.mendelu.pef.mystyleapp.navigation.NavGraph
 import cz.mendelu.pef.mystyleapp.ui.theme.MyStyleAppTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
+import cz.mendelu.pef.mystyleapp.ui.screens.NavGraphs
+import dagger.hilt.android.AndroidEntryPoint
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +30,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyStyleAppTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    NavGraph(startDestination = Destination.WelcomeScreen.route)
-                }
+                DestinationsNavHost(
+                    navGraph = NavGraphs.root
+                )
             }
         }
     }

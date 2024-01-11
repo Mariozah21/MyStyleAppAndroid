@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.data.Item
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
@@ -51,22 +52,23 @@ import cz.mendelu.pef.mystyleapp.ui.elements.ItemCard
 import cz.mendelu.pef.mystyleapp.ui.elements.MyItemCard
 import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.compose.getViewModel
+import com.ramcosta.composedestinations.annotation.Destination
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+@Destination
 @Composable
 fun MainScreen(
-    navigation: INavigationRouter,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel = getViewModel(),
 ){
-    BottomNavigation(false,navigation,navController = navController, topBarTitle = stringResource(R.string.main_screen_app_bar_title)) {
-        MainScreenContent(paddingValues = it, navigation = navigation ,viewModel = viewModel )
+    BottomNavigation(false,navigator, topBarTitle = stringResource(R.string.main_screen_app_bar_title)) {
+        MainScreenContent(paddingValues = it,navigator,viewModel = viewModel )
     }
 }
 @Composable
 fun MainScreenContent(
     paddingValues: PaddingValues,
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel
 ) {
     val items = viewModel.itemsState.shuffled().take(20) // Limit the number of items to 20
@@ -97,7 +99,7 @@ fun MainScreenContent(
                         username.value = viewModel.fetchUsernameByEmail(item.email) ?: ""
                     }
                     if (selectedCategory.value == null || item.category == selectedCategory.value) {
-                        ItemCard(item, username.value, navigation)
+                        ItemCard(item, username.value, navigator)
                     }
 
                 }

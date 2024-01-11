@@ -42,27 +42,33 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.database.FirestoreDB
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MainScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.RegisterScreenDestination
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.androidx.compose.getViewModel
+@Destination(start = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
     viewModel: WelcomeViewModel = getViewModel(),
 ){
     WelcomeScreenContent(
-        navigation = navigation,
+        navigator = navigator,
         viewModel = viewModel
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreenContent(
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
     viewModel: WelcomeViewModel
 ) {
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
@@ -75,7 +81,7 @@ fun WelcomeScreenContent(
         onAuthError = {
             user = null
         },
-        navigation = navigation
+        navigator = navigator
     )
     val token = stringResource(R.string.default_web_client_id)
     val context = LocalContext.current
@@ -125,7 +131,7 @@ fun WelcomeScreenContent(
         ClickableText(
             text = underlineText,
             onClick = {
-                navigation.navToRegisterScreen()
+                navigator.navigate(RegisterScreenDestination)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,7 +154,7 @@ fun WelcomeScreenContent(
                 Text(stringResource(R.string.welcome_sign_in_via_google))
             }
         } else {
-            navigation.navToMainScreen()
+            navigator.navigate(MainScreenDestination)
         }
     }
 
@@ -159,7 +165,7 @@ fun WelcomeScreenContent(
 fun rememberFirebaseAuthLauncher(
     onAuthComplete: (AuthResult) -> Unit,
     onAuthError: (ApiException) -> Unit,
-    navigation: INavigationRouter
+    navigator: DestinationsNavigator
 ): ManagedActivityResultLauncher<Intent, ActivityResult> {
     val scope = rememberCoroutineScope()
     return rememberLauncherForActivityResult(StartActivityForResult()) { result ->
@@ -176,7 +182,7 @@ fun rememberFirebaseAuthLauncher(
                     FirestoreDB.saveUser(user.displayName.toString(), user.email.toString())
                 }
                 onAuthComplete(authResult)
-                navigation.navToMainScreen()
+                navigator.navigate(MainScreenDestination)
             }
         } catch (e: ApiException) {
             onAuthError(e)

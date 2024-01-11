@@ -15,12 +15,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import cz.mendelu.pef.mystyleapp.architecture.BaseViewModel
 import cz.mendelu.pef.mystyleapp.data.Item
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.core.component.KoinComponent
 import java.util.*
+
 
 class FirestoreViewModel(
     private val context: Context

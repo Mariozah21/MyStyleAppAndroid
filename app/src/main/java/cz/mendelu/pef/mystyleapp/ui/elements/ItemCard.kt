@@ -21,7 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.mendelu.pef.mystyleapp.data.Item
 import coil.compose.rememberImagePainter
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import cz.mendelu.pef.mystyleapp.ui.screens.DetailViewViewModel
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.DetailViewDestination
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +33,7 @@ import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 fun ItemCard(
     item: Item,
     username: String,
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
 ) {
     Card(
         modifier = Modifier
@@ -37,7 +41,7 @@ fun ItemCard(
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
         onClick = {
-            navigation.navToDetailView(item.id)
+            navigator.navigate(DetailViewDestination(id=item.id))
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -66,6 +70,8 @@ fun ItemCard(
         }
     }
 }
+
+
 
 
 

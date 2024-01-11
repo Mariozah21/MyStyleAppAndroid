@@ -15,6 +15,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import cz.mendelu.pef.mystyleapp.architecture.BaseViewModel
 import cz.mendelu.pef.mystyleapp.database.FirestoreDB
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.koin.core.component.inject
 import org.koin.core.component.KoinComponent
 

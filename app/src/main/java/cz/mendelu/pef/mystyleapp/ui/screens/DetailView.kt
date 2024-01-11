@@ -18,19 +18,21 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.data.Item
-import cz.mendelu.pef.mystyleapp.navigation.Destination
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
 import org.koin.androidx.compose.getViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @Composable
 fun DetailView(
-    navigation: INavigationRouter,
+    navigator: DestinationsNavigator,
     id: String,
 ){
     val viewModel: DetailViewViewModel = remember { DetailViewViewModel(id) }
 
-    BackArrowScreen(topBarTitle = stringResource(R.string.detail_view_app_bar_title), onBackClick = { navigation.navBack() }) {
+    BackArrowScreen(topBarTitle = stringResource(R.string.detail_view_app_bar_title), onBackClick = { navigator.popBackStack() }) {
         DetailViewContent(
             paddingValues = it,
             id = id,
