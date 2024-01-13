@@ -59,6 +59,7 @@ import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.data.CartItem
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 import cz.mendelu.pef.mystyleapp.ui.elements.MyItemCard
+import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
 import org.koin.androidx.compose.getViewModel
 
 @Destination
@@ -67,7 +68,7 @@ fun MyCartScreen(
     navigator: DestinationsNavigator,
     viewModel: CartViewModel = getViewModel(),
 ){
-    var cartItems = remember {
+    val cartItems = remember {
         mutableStateListOf<CartItem>()
     }
 
@@ -82,9 +83,10 @@ fun MyCartScreen(
             }
         }
     }
-    BottomNavigation(false,navigator, topBarTitle = "My Cart") {
+    MyScaffold(topBarTitle = "My Cart", navigator = navigator, showBackArrow = true, onBackClick = {navigator.popBackStack()}) {
         MyCartScreenContent(navigator,cartItems,viewModel)
     }
+
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,6 +96,8 @@ fun MyCartScreenContent(
     viewModel: CartViewModel,
 ) {
     var selectedShippingOption by rememberSaveable { mutableStateOf<ShippingOption?>(ShippingOption.Address) }
+    var shippingPrice by remember { mutableStateOf(0.0) }
+    var totalCost by remember { mutableStateOf(cartItems.sumOf { it.price }) }
 
     Box(
         modifier = Modifier
@@ -246,6 +250,7 @@ fun MyCartScreenContent(
                                 // Additional info about delivery
                                 Text("Shipping Price:", fontWeight = FontWeight.Bold)
                                 Text("€5.00", textAlign = TextAlign.End)
+                                shippingPrice = 5.00
                             }
                         }
                     }
@@ -300,6 +305,7 @@ fun MyCartScreenContent(
                                 // Additional info about delivery
                                 Text("Shipping Price:", fontWeight = FontWeight.Bold)
                                 Text("€3.00", textAlign = TextAlign.End)
+                                shippingPrice = 3.00
                             }
 
                             // Additional content for express shipping option if needed
@@ -329,13 +335,21 @@ fun MyCartScreenContent(
                     ) {
                         // Additional info about delivery
                         Text("Total cost of order:", fontWeight = FontWeight.Bold)
-                        Text("€", textAlign = TextAlign.End)
+
+                        totalCost = cartItems.sumOf { it.price } + shippingPrice
+                        Text("€${totalCost}", textAlign = TextAlign.End)
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
 
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                                  if (selectedShippingOption == ShippingOption.Address){
+                                      /*TODO - check if all fields that are displayed for this option are filled out*/
+                                  } else {
+                                      /*TODO - check if all fields that are displayed for this option are filled out*/
+                                  }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
@@ -349,27 +363,28 @@ fun MyCartScreenContent(
 
 
 
-    @Composable
-    fun ShippingOptionRow(
-        text: String,
-        checked: Boolean,
-        onCheckedChange: (Boolean) -> Unit
+@Composable
+fun ShippingOptionRow(
+    text: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween // Align to the end
     ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = text)
-            Spacer(modifier = Modifier.width(16.dp))
-            Checkbox(
-                checked = checked,
-                onCheckedChange = onCheckedChange
-            )
-        }
+        Text(text = text)
+        Spacer(modifier = Modifier.width(16.dp))
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.size(30.dp) // Adjust the size as needed
+        )
     }
+}
 
 enum class ShippingOption {
         Address,

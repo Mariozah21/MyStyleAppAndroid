@@ -16,11 +16,11 @@ class NavigationRouterImpl(
     override fun navToMyProfileScreen() {
         navController.navigate(BottomNavItem.MyProfileScreen.route)
     }
-
+/*
     override fun navToChatsScreen() {
         navController.navigate(BottomNavItem.ChatsScreen.route)
     }
-
+*/
     override fun navToWelcomeScreen() {
         navController.navigate(Destination.WelcomeScreen.route)
     }

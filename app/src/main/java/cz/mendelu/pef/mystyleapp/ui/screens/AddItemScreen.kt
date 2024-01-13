@@ -54,6 +54,7 @@ import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.components.Constants
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
+import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyItemsScreenDestination
 import org.koin.androidx.compose.getViewModel
 
@@ -67,9 +68,16 @@ fun AddItemScreen(
     navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel = getViewModel(),
 ){
+    MyScaffold(topBarTitle = stringResource(R.string.add_items_screen_title), navigator = navigator, showBackArrow = true, onBackClick = { navigator.navigate(MyItemsScreenDestination) }) {
+        AddItemScreenContent(navigator, viewModel)
+
+    }
+    /*
     BackArrowScreen(topBarTitle = stringResource(R.string.add_items_screen_title), onBackClick = { navigator.navigate(MyItemsScreenDestination) }) {
         AddItemScreenContent(navigator, viewModel)
     }
+
+     */
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -228,7 +236,8 @@ fun AddItemScreenContent(
                     Text(
                         text = stringResource(R.string.add_item_category) + selectedCategory.value,
                         modifier = Modifier
-                            .padding(16.dp).fillMaxWidth(),
+                            .padding(16.dp)
+                            .fillMaxWidth(),
 
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground
@@ -236,7 +245,9 @@ fun AddItemScreenContent(
                 }else{
                     Text(
                         text = stringResource(R.string.add_item_tap_to_select_category),
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -296,14 +307,18 @@ fun AddItemScreenContent(
             if (selectedColor.value.isNotEmpty()) {
                 Text(
                     text = stringResource(R.string.add_item_color) + selectedColor.value,
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }else{
                 Text(
                     text = stringResource(R.string.add_item_tap_to_select_color),
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -338,14 +353,18 @@ fun AddItemScreenContent(
             if (selectedSize.value.isNotEmpty()) {
                 Text(
                     text = stringResource(R.string.add_item_size) + selectedSize.value,
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }else{
                 Text(
                     text = stringResource(R.string.add_item_tap_to_select_size),
-                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )

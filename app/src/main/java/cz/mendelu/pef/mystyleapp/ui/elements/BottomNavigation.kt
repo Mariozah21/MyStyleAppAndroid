@@ -54,7 +54,7 @@ fun BottomNavigation(
         BottomNavItem.MainScreen,
         BottomNavItem.SearchScreen,
         BottomNavItem.MyItemsScreen,
-        BottomNavItem.ChatsScreen,
+        //BottomNavItem.ChatsScreen,
         BottomNavItem.MyProfileScreen,
     )
     val coroutineScope = rememberCoroutineScope()
@@ -66,6 +66,7 @@ fun BottomNavigation(
             TopAppBar(title = {
                 Text(text = topBarTitle)
             },
+
                 actions = {
                     // Add your cart icon here
                     IconButton(onClick = { navigator.navigate(MyCartScreenDestination) }) {
@@ -101,7 +102,7 @@ fun BottomNavigation(
                             when (item) {
                                 BottomNavItem.MainScreen -> navigator.navigate(MainScreenDestination)
                                 BottomNavItem.MyProfileScreen -> navigator.navigate(MyProfileScreenDestination)
-                                BottomNavItem.ChatsScreen -> navigator.navigate(ChatScreenDestination)
+                                //BottomNavItem.ChatsScreen -> navigator.navigate(ChatScreenDestination)
                                 BottomNavItem.SearchScreen -> navigator.navigate(SearchScreenDestination)
                                 BottomNavItem.MyItemsScreen -> navigator.navigate(MyItemsScreenDestination)
                             }
