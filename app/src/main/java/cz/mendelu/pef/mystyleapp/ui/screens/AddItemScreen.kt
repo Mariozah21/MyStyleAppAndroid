@@ -1,7 +1,6 @@
 package cz.mendelu.pef.mystyleapp.ui.screens
 
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -45,13 +43,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
-import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.components.Constants
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
 import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
@@ -68,16 +64,17 @@ fun AddItemScreen(
     navigator: DestinationsNavigator,
     viewModel: FirestoreViewModel = getViewModel(),
 ){
+    /*
     MyScaffold(topBarTitle = stringResource(R.string.add_items_screen_title), navigator = navigator, showBackArrow = true, onBackClick = { navigator.navigate(MyItemsScreenDestination) }) {
         AddItemScreenContent(navigator, viewModel)
 
     }
-    /*
+    */
     BackArrowScreen(topBarTitle = stringResource(R.string.add_items_screen_title), onBackClick = { navigator.navigate(MyItemsScreenDestination) }) {
         AddItemScreenContent(navigator, viewModel)
     }
 
-     */
+
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,22 +1,11 @@
 package cz.mendelu.pef.mystyleapp.ui.screens
 
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.rememberCoroutineScope
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import cz.mendelu.pef.mystyleapp.architecture.BaseViewModel
 import cz.mendelu.pef.mystyleapp.database.FirestoreDB
-import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
-import dagger.hilt.android.lifecycle.HiltViewModel
-import org.koin.core.component.inject
 import org.koin.core.component.KoinComponent
 
 

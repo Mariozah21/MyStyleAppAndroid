@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import cz.mendelu.pef.mystyleapp.data.Item
 import coil.compose.rememberImagePainter
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.DetailViewDestination
 
 @OptIn(ExperimentalMaterial3Api::class)

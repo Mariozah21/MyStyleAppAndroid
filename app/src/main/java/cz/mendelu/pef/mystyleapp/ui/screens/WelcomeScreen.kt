@@ -43,11 +43,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.database.FirestoreDB
-import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MainScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.RegisterScreenDestination
 import kotlinx.coroutines.launch

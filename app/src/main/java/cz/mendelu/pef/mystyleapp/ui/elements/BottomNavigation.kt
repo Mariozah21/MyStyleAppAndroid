@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -28,13 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.navigation.BottomNavItem
-import cz.mendelu.pef.mystyleapp.navigation.Destination
-import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.AddItemScreenDestination
-import cz.mendelu.pef.mystyleapp.ui.screens.destinations.ChatScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MainScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyCartScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyItemsScreenDestination
