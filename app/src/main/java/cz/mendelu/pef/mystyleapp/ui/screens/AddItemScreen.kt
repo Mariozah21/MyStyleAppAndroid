@@ -2,6 +2,7 @@ package cz.mendelu.pef.mystyleapp.ui.screens
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -38,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -98,6 +100,7 @@ fun AddItemScreenContent(
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         selectedImageUri.value = uri
     }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -365,13 +368,14 @@ fun AddItemScreenContent(
                     size = selectedSize.value,
                     imageUri = selectedImageUri.value,
                     onSuccess = {
+                        Toast.makeText(context,"Item has been uploaded successfully", Toast.LENGTH_SHORT).show()
                         setIsUploading(false)
                         navigator.navigate(MyItemsScreenDestination)
-
                     },
                     onFailure = {
+                        Toast.makeText(context,"Please fill out all the Fields", Toast.LENGTH_SHORT).show()
                         setIsUploading(false)
-                        // Handle failure, e.g., show a Toast or display an error message
+
                     }
                 )
             },

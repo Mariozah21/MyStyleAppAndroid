@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -34,6 +36,7 @@ import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.AddItemScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.ChatScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MainScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyCartScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyItemsScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MyProfileScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.SearchScreenDestination
@@ -62,7 +65,13 @@ fun BottomNavigation(
         topBar = {
             TopAppBar(title = {
                 Text(text = topBarTitle)
-            })
+            },
+                actions = {
+                    // Add your cart icon here
+                    IconButton(onClick = { navigator.navigate(MyCartScreenDestination) }) {
+                        Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Cart")
+                    }
+                })
         },
 
         bottomBar = {

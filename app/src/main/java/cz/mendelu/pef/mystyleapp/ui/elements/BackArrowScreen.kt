@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,15 +23,16 @@ fun BackArrowScreen(
     content: @Composable (paddingValues: PaddingValues) -> Unit
 ){
     Scaffold(topBar = {
-        TopAppBar(title = {
-            Text(text = topBarTitle)
-        },
+        TopAppBar(
+            title = {
+                Text(text = topBarTitle)
+            },
             navigationIcon = {
                 IconButton(onClick = { onBackClick() }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
                 }
-
-            })
+            },
+            )
     }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             item {

@@ -1,42 +1,48 @@
 package cz.mendelu.pef.mystyleapp.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import cz.mendelu.pef.mystyleapp.R
-import cz.mendelu.pef.mystyleapp.data.Item
-import cz.mendelu.pef.mystyleapp.navigation.INavigationRouter
 import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
 import org.koin.androidx.compose.getViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import cz.mendelu.pef.mystyleapp.ui.screens.mycart.CartViewModel
 
 @Destination
 @Composable
 fun DetailView(
     navigator: DestinationsNavigator,
     id: String,
+    imageUrl: String,
+    title: String,
+    price: Double,
+    email: String,
+    description: String?,
+    stockCount: Int?,
+    color: String,
+    size: String,
+    category: String,
+
 ){
-    val viewModel: DetailViewViewModel = remember { DetailViewViewModel(id) }
+    val viewModel: CartViewModel = getViewModel()
 
     BackArrowScreen(topBarTitle = stringResource(R.string.detail_view_app_bar_title), onBackClick = { navigator.popBackStack() }) {
         DetailViewContent(
-            paddingValues = it,
-            id = id,
-            viewModel = viewModel,
+            paddingValues = it, id, imageUrl,title,price,email,description,stockCount, color,size,category, viewModel
             )
     }
 }
@@ -45,18 +51,27 @@ fun DetailView(
 fun DetailViewContent(
     paddingValues: PaddingValues,
     id: String,
-    viewModel: DetailViewViewModel,
+    imageUrl: String,
+    title: String,
+    price: Double,
+    email: String,
+    description: String?,
+    stockCount: Int?,
+    color: String,
+    size: String,
+    category: String,
+    viewModel: CartViewModel,
 
-) {
+    ) {
+    val context = LocalContext.current
 
 
-    val item = viewModel.fetchedItemState.value
 
 
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)) {
-        if (item != null) {
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -64,7 +79,7 @@ fun DetailViewContent(
             ) {
 
                 Image(
-                    painter = rememberImagePainter(item.imageUrl),
+                    painter = rememberImagePainter(imageUrl),
                     contentDescription = "Item Image",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,7 +89,7 @@ fun DetailViewContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = item.title,
+                    text = title,
                     style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -83,28 +98,40 @@ fun DetailViewContent(
                 Row() {
                     Text(text = stringResource(R.string.detail_view_price))
                     Text(
-                        text = "€ " + "${item.price}",
+                        text = "€ " + "${price}",
                         style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.fillMaxWidth().padding(start = 45.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 45.dp)
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                InfoElement(title = stringResource(R.string.detail_view_color) , content = item.color,45.dp)
+                InfoElement(title = stringResource(R.string.detail_view_color) , content = color,45.dp)
                 Spacer(modifier = Modifier.height(8.dp))
-                if(item.stockCount == null ) {
+                if(stockCount == null ) {
                     InfoElement(title = stringResource(R.string.detail_view_stock), content = stringResource(
                                             R.string.detail_view_stock_info_is_currently_not_available),45.dp)
                 } else{
-                    InfoElement(title = stringResource(R.string.detail_view_stock), content = item.stockCount.toString(),45.dp)
+                    InfoElement(title = stringResource(R.string.detail_view_stock), content = stockCount.toString(),45.dp)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
-                InfoElement(title = stringResource(R.string.detail_view_size), content = item.size,48.dp)
+                InfoElement(title = stringResource(R.string.detail_view_size), content = size,48.dp)
                 Spacer(modifier = Modifier.height(8.dp))
-                InfoElement(title = stringResource(R.string.detail_view_description), content = item.description, 37.dp)
+                InfoElement(title = stringResource(R.string.detail_view_description), content = description, 37.dp)
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+                    ,onClick = {
+                        viewModel.addToCart( title, price, imageUrl, size)
+                        Toast.makeText(context,"Item was added to cart", Toast.LENGTH_SHORT).show()
+                    }
+                )
+                {
+                    Text(text = stringResource(R.string.add_to_my_cart))
+                }
 
             }
-        }
     }
 }
 
@@ -121,13 +148,17 @@ fun InfoElement(
             Text(
                 text = "",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.fillMaxWidth().padding()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding()
             )
         }else{
             Text(
                 text = "${content}",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.fillMaxWidth().padding(start = paddingValue)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = paddingValue)
             )
 
         }

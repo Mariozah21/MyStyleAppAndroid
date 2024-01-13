@@ -34,7 +34,17 @@ fun MyItemCard(
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
         onClick = {
-            navigator.navigate(DetailViewDestination(id=item.id))
+            navigator.navigate(DetailViewDestination(
+                id=item.id,
+                imageUrl = item.imageUrl,
+                title = item.title,
+                price = item.price,
+                email = item.email,
+                description = item.description,
+                stockCount = item.stockCount,
+                color = item.color,
+                size = item.size,
+                category = item.category,))
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

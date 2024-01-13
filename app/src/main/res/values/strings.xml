@@ -43,4 +43,7 @@
     <string name="welcome_login">Login</string>
     <string name="welcome_register">Register</string>
     <string name="welcome_sign_in_via_google">Sign in via Google</string>
+    <string name="products_in_cart">Products in cart</string>
+    <string name="add_to_my_cart">Add to my cart</string>
+    <string name="no_items_in_cart">No items in cart</string>
 </resources>
