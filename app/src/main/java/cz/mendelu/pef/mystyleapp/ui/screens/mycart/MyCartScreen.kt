@@ -2,6 +2,7 @@ package cz.mendelu.pef.mystyleapp.ui.screens.mycart
 
 import android.content.Context
 import android.location.Address
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +62,7 @@ import cz.mendelu.pef.mystyleapp.data.CartItem
 import cz.mendelu.pef.mystyleapp.ui.elements.BottomNavigation
 import cz.mendelu.pef.mystyleapp.ui.elements.MyItemCard
 import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.OrderSuccessScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 @Destination
@@ -67,27 +70,33 @@ import org.koin.androidx.compose.getViewModel
 fun MyCartScreen(
     navigator: DestinationsNavigator,
     viewModel: CartViewModel = getViewModel(),
-){
+) {
     val cartItems = remember {
         mutableStateListOf<CartItem>()
     }
 
     viewModel.cartItems.value.let {
-        when(it){
+        when (it) {
             CartItemsUIState.Default -> {
                 viewModel.loadItems()
             }
+
             is CartItemsUIState.Success -> {
                 cartItems.clear()
                 cartItems.addAll(it.cartItems)
             }
         }
     }
-    MyScaffold(topBarTitle = "My Cart", navigator = navigator, showBackArrow = true, onBackClick = {navigator.popBackStack()}) {
-        MyCartScreenContent(navigator,cartItems,viewModel)
+    MyScaffold(
+        topBarTitle = "My Cart",
+        navigator = navigator,
+        showBackArrow = true,
+        onBackClick = { navigator.popBackStack() }) {
+        MyCartScreenContent(navigator, cartItems, viewModel)
     }
 
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyCartScreenContent(
@@ -98,6 +107,15 @@ fun MyCartScreenContent(
     var selectedShippingOption by rememberSaveable { mutableStateOf<ShippingOption?>(ShippingOption.Address) }
     var shippingPrice by remember { mutableStateOf(0.0) }
     var totalCost by remember { mutableStateOf(cartItems.sumOf { it.price }) }
+    //Forms for shipping
+    val name = remember { mutableStateOf("") }
+    val surname = remember { mutableStateOf("") }
+    val streetName = remember { mutableStateOf("") }
+    val number = remember { mutableStateOf("") }
+    val postalCode = remember { mutableStateOf("") }
+    val city = remember { mutableStateOf("") }
+    //context
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -225,18 +243,64 @@ fun MyCartScreenContent(
                                 .padding(16.dp)
                         ) {
                             TextField(
-                                value = "", // Provide the actual value from your data or use a mutableState
-                                onValueChange = { /* Handle value change */ },
+                                value = name.value, // Provide the actual value from your data or use a mutableState
+                                onValueChange = { name.value = it },
                                 label = { Text("Name") }
                             )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            TextField(
+                                value = surname.value, // Provide the actual value from your data or use a mutableState
+                                onValueChange = { surname.value = it },
+                                label = { Text("Surname") }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                                TextField(
+                                    value = streetName.value, // Provide the actual value from your data or use a mutableState
+                                    onValueChange = { streetName.value = it },
+                                    label = { Text("Street name") }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                TextField(
+                                    value = number.value, // Provide the actual value from your data or use a mutableState
+                                    onValueChange = { input ->
+                                        val filteredInput = input.filter { char ->
+                                            char.isDigit() || char == '/'
+                                        }
+                                        val isValidFormat = filteredInput.matches(Regex("^[0-9]+(/?[a-zA-Z]?)?$"))
+                                        if (isValidFormat) {
+                                            number.value = filteredInput
+                                        } else {
+                                            // Handle invalid format
+                                        }},
+                                    label = { Text("Orientation Number") }
+                                )
+
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            TextField(
-                                value = "", // Provide the actual value from your data or use a mutableState
-                                onValueChange = { /* Handle value change */ },
-                                label = { Text("Surname") }
-                            )
+                                TextField(
+                                    value = city.value, // Provide the actual value from your data or use a mutableState
+                                    onValueChange = { city.value = it },
+                                    label = { Text("City") }
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                TextField(
+                                    value = postalCode.value, // Provide the actual value from your data or use a mutableState
+                                    onValueChange = {
+                                            input ->
+                                        val filteredInput = input.filter { it.isDigit() }
+                                        if (filteredInput.length < 6) {
+                                            postalCode.value = filteredInput
+                                        }else{
+                                            Toast.makeText(context, "Wrong format", Toast.LENGTH_SHORT).show()
+                                        }},
+                                    label = { Text("Postal Code") }
+                                )
+
+
 
                             Spacer(modifier = Modifier.height(8.dp))
                             // Address fields
@@ -344,12 +408,25 @@ fun MyCartScreenContent(
 
                     Button(
                         onClick = {
-                                  if (selectedShippingOption == ShippingOption.Address){
-                                      /*TODO - check if all fields that are displayed for this option are filled out*/
-                                  } else {
-                                      /*TODO - check if all fields that are displayed for this option are filled out*/
-                                  }
+                            if (selectedShippingOption == ShippingOption.Address) {
+                                if(
+                                    name.value.isNotEmpty() &&
+                                    surname.value.isNotEmpty() &&
+                                    streetName.value.isNotEmpty() &&
+                                    number.value.isNotEmpty() &&
+                                    city.value.isNotEmpty() &&
+                                    postalCode.value.isNotEmpty()
+                                    ){
+                                    /*TODO - animation of loading, send request (redirect to success screen)*/
+                                    navigator.navigate(OrderSuccessScreenDestination)
+                                } else {
+                                    Toast.makeText(context, "Please fill out all the fields", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                /*TODO - check if all fields that are displayed for this option are filled out*/
+                            }
                         },
+                        enabled = cartItems.isNotEmpty(),
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
@@ -360,7 +437,6 @@ fun MyCartScreenContent(
         }
     }
 }
-
 
 
 @Composable
@@ -387,6 +463,8 @@ fun ShippingOptionRow(
 }
 
 enum class ShippingOption {
-        Address,
-        PickupBox
+    Address,
+    PickupBox
 }
+
+

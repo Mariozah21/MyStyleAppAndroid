@@ -20,6 +20,7 @@ import cz.mendelu.pef.mystyleapp.ui.elements.BackArrowScreen
 import org.koin.androidx.compose.getViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
 import cz.mendelu.pef.mystyleapp.ui.screens.mycart.CartViewModel
 
 @Destination
@@ -39,12 +40,24 @@ fun DetailView(
 
 ){
     val viewModel: CartViewModel = getViewModel()
-
+    MyScaffold(
+        topBarTitle = stringResource(R.string.detail_view_app_bar_title),
+        navigator = navigator,
+        onBackClick = { navigator.popBackStack() },
+        showBackArrow = true
+    ) {
+        DetailViewContent(
+            paddingValues = it, id, imageUrl,title,price,email,description,stockCount, color,size,category, viewModel
+        )
+    }
+    /*
     BackArrowScreen(topBarTitle = stringResource(R.string.detail_view_app_bar_title), onBackClick = { navigator.popBackStack() }) {
         DetailViewContent(
             paddingValues = it, id, imageUrl,title,price,email,description,stockCount, color,size,category, viewModel
             )
     }
+
+     */
 }
 
 @Composable
