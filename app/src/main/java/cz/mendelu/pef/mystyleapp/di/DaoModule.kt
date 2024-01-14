@@ -1,8 +1,7 @@
 package cz.mendelu.pef.mystyleapp.di
 
-import android.content.ClipData.Item
-import cz.mendelu.pef.mystyleapp.architecture.CartDatabase
-import cz.mendelu.pef.mystyleapp.architecture.ItemDao
+import cz.mendelu.pef.mystyleapp.cartDatabase.communication.CartDatabase
+import cz.mendelu.pef.mystyleapp.cartDatabase.communication.ItemDao
 import org.koin.dsl.module
 
 val daoModule = module {

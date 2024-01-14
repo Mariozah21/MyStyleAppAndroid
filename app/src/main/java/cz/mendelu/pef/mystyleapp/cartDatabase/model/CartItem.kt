@@ -1,4 +1,4 @@
-package cz.mendelu.pef.mystyleapp.data
+package cz.mendelu.pef.mystyleapp.cartDatabase.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

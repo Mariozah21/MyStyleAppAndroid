@@ -1,12 +1,10 @@
-package cz.mendelu.pef.mystyleapp.architecture
+package cz.mendelu.pef.mystyleapp.cartDatabase.communication
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-import cz.mendelu.pef.mystyleapp.data.CartItem
+import cz.mendelu.pef.mystyleapp.cartDatabase.model.CartItem
 
 /**
  * Database class with a singleton Instance object.

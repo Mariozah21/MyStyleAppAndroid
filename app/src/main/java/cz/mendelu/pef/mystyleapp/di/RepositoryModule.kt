@@ -1,8 +1,8 @@
 package cz.mendelu.pef.mystyleapp.di
 
-import cz.mendelu.pef.mystyleapp.architecture.ItemDao
-import cz.mendelu.pef.mystyleapp.architecture.ItemsRepository
-import cz.mendelu.pef.mystyleapp.architecture.ItemsRepositoryImpl
+import cz.mendelu.pef.mystyleapp.cartDatabase.communication.ItemDao
+import cz.mendelu.pef.mystyleapp.cartDatabase.communication.ItemsRepository
+import cz.mendelu.pef.mystyleapp.cartDatabase.communication.ItemsRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {

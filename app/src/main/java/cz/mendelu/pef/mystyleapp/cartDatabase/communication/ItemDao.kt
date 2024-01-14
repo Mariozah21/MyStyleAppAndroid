@@ -1,11 +1,11 @@
-package cz.mendelu.pef.mystyleapp.architecture
+package cz.mendelu.pef.mystyleapp.cartDatabase.communication
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import cz.mendelu.pef.mystyleapp.data.CartItem
+import cz.mendelu.pef.mystyleapp.cartDatabase.model.CartItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -1,6 +1,6 @@
-package cz.mendelu.pef.mystyleapp.architecture
+package cz.mendelu.pef.mystyleapp.cartDatabase.communication
 
-import cz.mendelu.pef.mystyleapp.data.CartItem
+import cz.mendelu.pef.mystyleapp.cartDatabase.model.CartItem
 import kotlinx.coroutines.flow.Flow
 
 class ItemsRepositoryImpl(private val itemDao: ItemDao) : ItemsRepository {

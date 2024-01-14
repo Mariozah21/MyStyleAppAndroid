@@ -5,7 +5,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import cz.mendelu.pef.mystyleapp.architecture.BaseViewModel
-import cz.mendelu.pef.mystyleapp.database.FirestoreDB
+import cz.mendelu.pef.mystyleapp.firestoreCloudStorage.FirestoreDB
 import org.koin.core.component.KoinComponent
 
 

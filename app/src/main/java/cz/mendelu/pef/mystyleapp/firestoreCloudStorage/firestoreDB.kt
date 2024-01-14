@@ -1,4 +1,4 @@
-package cz.mendelu.pef.mystyleapp.database
+package cz.mendelu.pef.mystyleapp.firestoreCloudStorage
 
 import com.google.firebase.firestore.FirebaseFirestore
 

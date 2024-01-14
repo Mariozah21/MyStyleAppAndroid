@@ -45,7 +45,7 @@ import com.google.firebase.ktx.Firebase
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
-import cz.mendelu.pef.mystyleapp.database.FirestoreDB
+import cz.mendelu.pef.mystyleapp.firestoreCloudStorage.FirestoreDB
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.MainScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.RegisterScreenDestination
 import kotlinx.coroutines.launch
