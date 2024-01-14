@@ -10,7 +10,6 @@ import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.google.maps.android.collections.PolygonManager
 import cz.mendelu.pef.mystyleapp.packetaApi.model.PointItem
-import cz.mendelu.pef.mystyleapp.packetaApi.model.PointResponse
 
 class CustomMapRenderer(
     private val context: Context,
@@ -27,7 +26,7 @@ class CustomMapRenderer(
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getIcon(item)))
     }
     override fun shouldRenderAsCluster(cluster: Cluster<PointItem>): Boolean {
-        return cluster.size > 2
+        return cluster.size > 5
     }
 
     private fun getIcon(pointItem: PointItem): Bitmap {

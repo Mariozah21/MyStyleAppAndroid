@@ -2,10 +2,13 @@ package cz.mendelu.pef.mystyleapp.ui.screens.mapscreen
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import cz.mendelu.pef.mystyleapp.architecture.BaseViewModel
 import cz.mendelu.pef.mystyleapp.architecture.CommunicationResult
 import cz.mendelu.pef.mystyleapp.packetaApi.communication.IPacketaRemoteRepository
-import cz.mendelu.pef.mystyleapp.packetaApi.model.PointResponse
+import cz.mendelu.pef.mystyleapp.packetaApi.model.BranchesResponse
+import cz.mendelu.pef.mystyleapp.packetaApi.model.PointItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,7 +19,11 @@ class PacketaMapViewModel (
     private val repository: IPacketaRemoteRepository
 ) : BaseViewModel(){
 
-    val placesUIState: MutableState<UiState<List<PointResponse>,
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    val placesUIState: MutableState<UiState<BranchesResponse,
             MarkerClusteringErrors>> = mutableStateOf(
         UiState(loading = true)
     )

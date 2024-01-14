@@ -1,6 +1,7 @@
 package cz.mendelu.pef.mystyleapp.ui.screens.mapscreen
 
 import android.graphics.Path
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -24,8 +25,8 @@ import com.google.maps.android.compose.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.map.CustomMapRenderer
+import cz.mendelu.pef.mystyleapp.packetaApi.model.BranchesResponse
 import cz.mendelu.pef.mystyleapp.packetaApi.model.PointItem
-import cz.mendelu.pef.mystyleapp.packetaApi.model.PointResponse
 import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
 import org.koin.androidx.compose.getViewModel
 
@@ -38,7 +39,7 @@ fun PacketaMapScreen(
 {
 
 
-    val uiState: MutableState<UiState<List<PointResponse>, MarkerClusteringErrors>> =
+    val uiState: MutableState<UiState<BranchesResponse, MarkerClusteringErrors>> =
         rememberSaveable { mutableStateOf(UiState()) }
 
     viewModel.placesUIState.value.let {
@@ -48,7 +49,8 @@ fun PacketaMapScreen(
         PacketaMapScreenContent(
             paddingValues = it,
             navigator = navigator,
-            mapData = uiState.value.data
+            mapData = uiState.value.data,
+            viewModel = viewModel
         )
     }
 
@@ -59,10 +61,11 @@ fun PacketaMapScreen(
 fun PacketaMapScreenContent(
     paddingValues: PaddingValues,
     navigator: DestinationsNavigator,
-    mapData: List<PointResponse>?,
+    mapData: BranchesResponse?,
+    viewModel: PacketaMapViewModel,
 ) {
-
-
+    //val uiState by viewModel.placesUIState.collectAsState()
+    Log.e("MY message",mapData.toString())
     val mapUiSettings by remember { mutableStateOf(
         MapUiSettings(
             zoomControlsEnabled = false,
@@ -76,8 +79,10 @@ fun PacketaMapScreenContent(
     var customRenderer by remember { mutableStateOf<CustomMapRenderer?>(null) }
     var manager by remember { mutableStateOf<ClusterManager<PointItem>?>(null) }
 
-    if (mapData != null) {
-        manager?.addItems(mapData.flatMap { it.data.values })
+    if (mapData != null ) {
+        val points = mapData.data.values.toList()
+        Log.d("MapData", mapData.toString())
+        manager?.addItems(points)
         manager?.cluster()
     }
 
@@ -96,6 +101,7 @@ fun PacketaMapScreenContent(
                         googleMap = it
                     }
                     if (manager == null) {
+                        Log.d("ClusterManager", "Initializing Cluster Manager")
                         manager = ClusterManager<PointItem>(context, googleMap)
                         customRenderer = CustomMapRenderer(context, googleMap!!, manager!!)
 
@@ -103,12 +109,13 @@ fun PacketaMapScreenContent(
                             algorithm = GridBasedAlgorithm()
                             renderer = customRenderer
                         }
-
-                        manager?.addItems(mapData.flatMap { it.data.values })
+                        val points = mapData.data.values.toList()
+                        manager?.addItems(points)
 
                     }
 
                     googleMap?.setOnCameraIdleListener {
+                        Log.d("CameraIdle", "Camera is idle. Clustering markers.")
                         manager?.cluster()
                     }
                 }

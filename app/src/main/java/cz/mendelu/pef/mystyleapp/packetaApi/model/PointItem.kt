@@ -4,12 +4,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-
+/*
 @JsonClass(generateAdapter = true)
 data class PointResponse(
     @Json(name = "data")
     val data: Map<String, PointItem>
 )
+
+ */
 
 @JsonClass(generateAdapter = true)
 data class PointItem(
@@ -21,18 +23,8 @@ data class PointItem(
     val city: String,
     val zip: String,
     val country: String,
-    val currency: String,
+    val currency: String?,
     val status: Status?,
-    @Json(name = "displayFrontend")
-    val displayFrontend: String?,
-    val directions: String?,
-    val directionsCar: String?,
-    val directionsPublic: String?,
-    val wheelchairAccessible: String?,
-    val creditCardPayment: String?,
-    val dressingRoom: String?,
-    val claimAssistant: String?,
-    val packetConsignment: String?,
     val latitude: Double,
     val longitude: Double,
     val url: String?,
@@ -41,9 +33,11 @@ data class PointItem(
     val labelRouting: String?,
     @Json(name = "labelName")
     val labelName: String?,
-    val photos: List<Photo>?,
+    /*
     @Json(name = "openingHours")
     val openingHours: OpeningHours?
+
+     */
 ) : ClusterItem {
     override fun getPosition(): LatLng {
         return LatLng(latitude, longitude)
@@ -67,25 +61,24 @@ data class PointItem(
 @JsonClass(generateAdapter = true)
 data class Status(
     @Json(name = "statusId")
-    val statusId: String,
-    val description: String
+    val statusId: String?,
+    val description: String?
 )
 
-
-@JsonClass(generateAdapter = true)
-data class Photo(
-    val thumbnail: String,
-    val normal: String
-)
 
 @JsonClass(generateAdapter = true)
 data class OpeningHours(
     @Json(name = "compactShort")
-    val compactShort: String,
+    val compactShort: String?,
     @Json(name = "compactLong")
-    val compactLong: String,
+    val compactLong: String?,
     @Json(name = "tableLong")
-    val tableLong: String,
-    val regular: Map<String, String>,
-    val exceptions: Map<String, String>
+    val tableLong: String?,
+    val regular: Map<String, String>?,
+    val exceptions: OpeningHoursExceptions?
+)
+
+@JsonClass(generateAdapter = true)
+data class OpeningHoursExceptions(
+    val exception: List<String>?  // adjust the type accordingly
 )
