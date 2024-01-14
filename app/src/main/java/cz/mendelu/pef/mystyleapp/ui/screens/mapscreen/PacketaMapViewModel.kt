@@ -28,6 +28,7 @@ class PacketaMapViewModel (
         UiState(loading = true)
     )
 
+
     init {
         loadPlaces()
     }

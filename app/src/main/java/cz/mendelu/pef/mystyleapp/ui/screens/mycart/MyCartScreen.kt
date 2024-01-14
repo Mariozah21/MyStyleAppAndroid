@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LocationOn
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +44,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,9 +53,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.cartDatabase.model.CartItem
+import cz.mendelu.pef.mystyleapp.packetaApi.model.BranchesResponse
+import cz.mendelu.pef.mystyleapp.packetaApi.model.PointItem
 import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.OrderSuccessScreenDestination
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.PacketaMapScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.mapscreen.MarkerClusteringErrors
+import cz.mendelu.pef.mystyleapp.ui.screens.mapscreen.PacketaMapViewModel
+import cz.mendelu.pef.mystyleapp.ui.screens.mapscreen.UiState
 import org.koin.androidx.compose.getViewModel
 
 @Destination
@@ -60,10 +68,18 @@ import org.koin.androidx.compose.getViewModel
 fun MyCartScreen(
     navigator: DestinationsNavigator,
     viewModel: CartViewModel = getViewModel(),
+    mapViewModel: PacketaMapViewModel = getViewModel(),
 ) {
     val cartItems = remember {
         mutableStateListOf<CartItem>()
     }
+    val uiState: MutableState<UiState<BranchesResponse, MarkerClusteringErrors>> =
+        rememberSaveable { mutableStateOf(UiState()) }
+
+    mapViewModel.placesUIState.value.let {
+        uiState.value = it
+    }
+
 
     viewModel.cartItems.value.let {
         when (it) {
@@ -82,7 +98,7 @@ fun MyCartScreen(
         navigator = navigator,
         showBackArrow = true,
         onBackClick = { navigator.popBackStack() }) {
-        MyCartScreenContent(navigator, cartItems, viewModel)
+        MyCartScreenContent(navigator, cartItems, viewModel, mapViewModel, uiState.value.data)
     }
 
 }
@@ -93,7 +109,10 @@ fun MyCartScreenContent(
     navigator: DestinationsNavigator,
     cartItems: MutableList<CartItem>,
     viewModel: CartViewModel,
+    mapViewModel: PacketaMapViewModel,
+    mapItems: BranchesResponse?,
 ) {
+
     var selectedShippingOption by rememberSaveable { mutableStateOf<ShippingOption?>(ShippingOption.Address) }
     var shippingPrice by remember { mutableStateOf(0.0) }
     var totalCost by remember { mutableStateOf(cartItems.sumOf { it.price }) }
@@ -106,6 +125,8 @@ fun MyCartScreenContent(
     val city = remember { mutableStateOf("") }
     //context
     val context = LocalContext.current
+    var searchText by remember { mutableStateOf("") }
+    var suggestions by remember { mutableStateOf<List<PointItem>>(emptyList()) }
 
     Box(
         modifier = Modifier
@@ -326,11 +347,24 @@ fun MyCartScreenContent(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 TextField(
-                                    value = "", // Provide the actual value from your data or use a mutableState
-                                    onValueChange = { /* Handle value change */ },
+                                    value = searchText, // Provide the actual value from your data or use a mutableState
+                                    onValueChange = {
+                                        searchText = it
+                                        if(mapItems != null){
+                                            suggestions = getMatchingItems(mapItems, it)
+                                        } else{
+
+                                        }
+
+                                    },
                                     label = { Text("Enter Address or Postal Code") },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                            keyboardOptions = KeyboardOptions.Default.copy(
+                                            imeAction = ImeAction.Done
+                                            )
                                 )
+                                /* TODO - I need to show suggestions here*/
+
 
                                 // Spacer for some separation
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -408,12 +442,19 @@ fun MyCartScreenContent(
                                     postalCode.value.isNotEmpty()
                                     ){
                                     /*TODO - animation of loading, send request (redirect to success screen)*/
-                                    navigator.navigate(OrderSuccessScreenDestination)
+                                    navigator.navigate(OrderSuccessScreenDestination(totalCost,streetName.toString(),number.toString(),city.toString(), ""))
                                 } else {
                                     Toast.makeText(context, "Please fill out all the fields", Toast.LENGTH_SHORT).show()
                                 }
                             } else {
+                                if(searchText.isNotEmpty()){
+                                    navigator.navigate(OrderSuccessScreenDestination(totalCost,"","","", searchText.toString()))
+
+                                } else {
+                                    Toast.makeText(context, "Please fill out all the fields", Toast.LENGTH_SHORT).show()
+                                }
                                 /*TODO - check if all fields that are displayed for this option are filled out*/
+
                             }
                         },
                         enabled = cartItems.isNotEmpty(),
@@ -426,6 +467,18 @@ fun MyCartScreenContent(
             }
         }
     }
+
+}
+private fun getMatchingItems(mapItems: BranchesResponse, query: String): List<PointItem> {
+    return mapItems.data.values.filter { item ->
+        item.place.contains(query, ignoreCase = true) ||
+                item.street.contains(query, ignoreCase = true) ||
+                item.zip.contains(query, ignoreCase = true)
+    }
+}
+
+private fun PointItem.getFullAddress(): String {
+    return "$place, $street, $city, $zip"
 }
 
 
