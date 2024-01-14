@@ -16,6 +16,10 @@
         android:theme="@style/Theme.MyStyleApp"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC0OTiwAcTtmI7rCH90N2m0IhR7Lk5RIRA" />
+
         <!-- FileProvider Configuration -->
         <provider
             android:name="androidx.core.content.FileProvider"

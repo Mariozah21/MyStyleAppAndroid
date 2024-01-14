@@ -1,19 +1,18 @@
 package cz.mendelu.pef.mystyleapp.packetaApi.di
 
 import cz.mendelu.pef.mystyleapp.packetaApi.communication.PacketaAPI
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.module
 import retrofit2.Retrofit
-import javax.inject.Singleton
+import retrofit2.converter.moshi.MoshiConverterFactory
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ApiModule {
+val apiModule = module {
+    single { createWebService<PacketaAPI>() }
+}
 
-    @Provides
-    @Singleton
-    fun providePetsAPI(retrofit: Retrofit): PacketaAPI
-            = retrofit.create(PacketaAPI::class.java)
+inline fun <reified T> createWebService(): T {
+    return Retrofit.Builder()
+        .baseUrl("https://www.zasilkovna.cz/api/v4/5d32f243ef0dea43/")
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+        .create(T::class.java)
 }

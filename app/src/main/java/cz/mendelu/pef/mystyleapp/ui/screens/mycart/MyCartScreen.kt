@@ -52,6 +52,7 @@ import cz.mendelu.pef.mystyleapp.R
 import cz.mendelu.pef.mystyleapp.cartDatabase.model.CartItem
 import cz.mendelu.pef.mystyleapp.ui.elements.MyScaffold
 import cz.mendelu.pef.mystyleapp.ui.screens.destinations.OrderSuccessScreenDestination
+import cz.mendelu.pef.mystyleapp.ui.screens.destinations.PacketaMapScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 @Destination
@@ -336,7 +337,7 @@ fun MyCartScreenContent(
 
                                 // Icon at the end
                                 IconButton(
-                                    onClick = { /* Handle icon click */ },
+                                    onClick = { navigator.navigate(PacketaMapScreenDestination)  },
                                     modifier = Modifier.size(48.dp)
                                 ) {
                                     // Replace the placeholder icon with your desired icon

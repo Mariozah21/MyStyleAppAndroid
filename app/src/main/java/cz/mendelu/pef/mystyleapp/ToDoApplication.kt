@@ -7,6 +7,11 @@ import cz.mendelu.pef.mystyleapp.di.daoModule
 import cz.mendelu.pef.mystyleapp.di.databaseModule
 import cz.mendelu.pef.mystyleapp.di.repositoryModule
 import cz.mendelu.pef.mystyleapp.di.viewModelModule
+import cz.mendelu.pef.mystyleapp.packetaApi.di.apiModule
+import cz.mendelu.pef.mystyleapp.packetaApi.di.packetaRemoteRepositoryModule
+import cz.mendelu.pef.mystyleapp.packetaApi.di.pointResponseModule
+import cz.mendelu.pef.mystyleapp.packetaApi.di.remoteRepositoryModule
+import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -24,7 +29,11 @@ class ToDoApplication : Application() {
                 viewModelModule,
                 repositoryModule,
                 daoModule,
-                databaseModule
+                databaseModule,
+                apiModule,
+                remoteRepositoryModule,
+                pointResponseModule,
+                packetaRemoteRepositoryModule
 
             ))
 

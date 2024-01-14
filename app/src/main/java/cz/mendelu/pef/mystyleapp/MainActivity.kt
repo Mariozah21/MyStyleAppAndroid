@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import cz.mendelu.pef.mystyleapp.ui.theme.MyStyleAppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import cz.mendelu.pef.mystyleapp.ui.screens.NavGraphs
-
+import dagger.hilt.android.AndroidEntryPoint
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
